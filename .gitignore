@@ -1,0 +1,31 @@
+# WordPress core (not vendored into this repo — theme/plugin only)
+/wp-admin/
+/wp-includes/
+/wp-*.php
+!wp-content/
+/xmlrpc.php
+/wp-config.php
+
+# Dependencies
+/vendor/
+/node_modules/
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# Playwright
+/test-results/
+/playwright-report/
+/playwright/.cache/
+
+# PHPUnit
+/.phpunit.result.cache
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log

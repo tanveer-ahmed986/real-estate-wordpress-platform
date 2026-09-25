@@ -1,0 +1,44 @@
+<!-- wp:template-part {"slug":"header","tagName":"header"} /-->
+
+<!-- wp:group {"tagName":"main","className":"pe-main","layout":{"type":"constrained"}} -->
+<main class="wp-block-group pe-main" id="pe-main-content">
+	<!-- wp:query-title {"type":"archive"} /-->
+
+	<!-- wp:term-description /-->
+
+	<!-- wp:query {"queryId":0,"query":{"inherit":true,"perPage":9},"tagName":"div","className":"pe-insights-grid"} -->
+	<div class="wp-block-query pe-insights-grid">
+		<!-- wp:post-template -->
+			<!-- wp:group {"className":"pe-insight-card","layout":{"type":"constrained"}} -->
+			<div class="wp-block-group pe-insight-card">
+				<!-- wp:post-featured-image {"isLink":true} /-->
+				<!-- wp:post-terms {"term":"insight_category"} /-->
+				<!-- wp:post-title {"isLink":true} /-->
+				<!-- wp:group {"className":"pe-insight-card__meta","layout":{"type":"flex"}} -->
+				<div class="wp-block-group pe-insight-card__meta">
+					<!-- wp:post-author-name /-->
+					<!-- wp:post-date /-->
+				</div>
+				<!-- /wp:group -->
+				<!-- wp:post-excerpt /-->
+			</div>
+			<!-- /wp:group -->
+		<!-- /wp:post-template -->
+
+		<!-- wp:query-pagination -->
+			<!-- wp:query-pagination-previous /-->
+			<!-- wp:query-pagination-numbers /-->
+			<!-- wp:query-pagination-next /-->
+		<!-- /wp:query-pagination -->
+
+		<!-- wp:query-no-results -->
+			<!-- wp:paragraph -->
+			<p>No articles found in this category yet.</p>
+			<!-- /wp:paragraph -->
+		<!-- /wp:query-no-results -->
+	</div>
+	<!-- /wp:query -->
+</main>
+<!-- /wp:group -->
+
+<!-- wp:template-part {"slug":"footer","tagName":"footer"} /-->

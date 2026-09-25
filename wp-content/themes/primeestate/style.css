@@ -1,0 +1,79 @@
+/*
+Theme Name:   PrimeEstate
+Theme URI:    https://primeestate.local
+Author:       PrimeEstate
+Author URI:   https://primeestate.local
+Description:  Custom real estate listing and management theme. Presentation layer only — all business logic, data model, and REST endpoints live in the primeestate-core plugin.
+Requires at least: 6.5
+Tested up to: 6.6
+Requires PHP: 8.1
+Version:      1.0.0
+License:      GNU General Public License v2 or later
+License URI:  https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain:  primeestate
+*/
+
+/* T099: `.screen-reader-text` has been referenced since Phase 2 (the skip
+   link, accessibility.php) and by every ARIA-live status region built
+   since, but was never actually defined anywhere in this project — with no
+   rule to hide it, that content was rendering visibly for sighted users
+   the whole time. Standard WordPress core convention: visually hidden,
+   revealed on focus so a keyboard user can see the skip link land. */
+.screen-reader-text {
+	border: 0;
+	clip: rect(1px, 1px, 1px, 1px);
+	clip-path: inset(50%);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
+	word-wrap: normal !important;
+}
+
+.screen-reader-text:focus {
+	background-color: #f1f1f1;
+	border-radius: 3px;
+	box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.6);
+	clip: auto !important;
+	clip-path: none;
+	color: #21759b;
+	display: block;
+	font-size: 0.875rem;
+	font-weight: 700;
+	height: auto;
+	left: 5px;
+	line-height: normal;
+	padding: 15px 23px 14px;
+	text-decoration: none;
+	top: 5px;
+	width: auto;
+	z-index: 100000;
+}
+
+/* T099 (SC-011): visible focus indicator on every interactive element,
+   site-wide — this project has no other global stylesheet, so this is the
+   one place a missing `:focus-visible` rule would otherwise leave keyboard
+   users with no visible focus indicator at all (WCAG 2.2 SC 2.4.7). */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+	outline: 3px solid #1a5fb4;
+	outline-offset: 2px;
+}
+
+.pe-property-gallery__close {
+	display: none;
+}
+
+.pe-property-gallery--fullscreen .pe-property-gallery__close {
+	display: block;
+	position: absolute;
+	top: 1rem;
+	right: 1rem;
+	z-index: 1;
+}

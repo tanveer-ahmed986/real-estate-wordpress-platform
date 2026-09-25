@@ -1,0 +1,560 @@
+openapi: 3.0.3
+info:
+  title: PrimeEstate Core REST API
+  version: "1.0.0"
+  description: >
+    Custom REST endpoints exposed by the primeestate-core plugin under the
+    WordPress REST API namespace `primeestate/v1`. Endpoints beyond what is
+    listed here (e.g., reading a single published property) are served by
+    core WordPress REST routes for the `property` post type and are not
+    duplicated here. Every endpoint enforces the permission callback,
+    input validation, sanitization, and error handling required by FR-055,
+    FR-045, and constitution Principle II.
+servers:
+  - url: /wp-json/primeestate/v1
+security:
+  - cookieAuth: []
+  - {}
+paths:
+  /properties:
+    get:
+      summary: Search and filter properties (FR-011, FR-012, FR-013)
+      operationId: searchProperties
+      security: []
+      parameters:
+        - name: ids
+          in: query
+          description: >
+            Comma-separated property IDs. When present, bypasses all other
+            filters and returns exactly these properties in the given order
+            (used by the client-side-only Favorites and Comparison views,
+            data-model.md §7/§8, to fetch fresh data for a locally-held ID
+            list — added post-MVP alongside those features, not part of the
+            original search filter set).
+          schema: { type: string }
+        - name: listing
+          in: query
+          schema: { type: string, enum: [sale, rent, lease] }
+        - name: city
+          in: query
+          schema: { type: string }
+        - name: type
+          in: query
+          schema: { type: string }
+        - name: min_price
+          in: query
+          schema: { type: number, minimum: 0 }
+        - name: max_price
+          in: query
+          schema: { type: number, minimum: 0 }
+        - name: bedrooms
+          in: query
+          schema: { type: integer, minimum: 0 }
+        - name: bathrooms
+          in: query
+          schema: { type: integer, minimum: 0 }
+        - name: min_area
+          in: query
+          schema: { type: number, minimum: 0 }
+        - name: max_area
+          in: query
+          schema: { type: number, minimum: 0 }
+        - name: amenities
+          in: query
+          schema: { type: array, items: { type: string } }
+          style: form
+          explode: false
+        - name: status
+          in: query
+          schema: { type: string }
+        - name: sort
+          in: query
+          schema:
+            type: string
+            enum: [newest, price_asc, price_desc, area_desc, relevance]
+            default: relevance
+        - name: page
+          in: query
+          schema: { type: integer, minimum: 1, default: 1 }
+      responses:
+        "200":
+          description: Paginated, filtered property results.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total: { type: integer }
+                  page: { type: integer }
+                  per_page: { type: integer }
+                  results:
+                    type: array
+                    items: { $ref: "#/components/schemas/PropertySummary" }
+        "400":
+          description: Invalid filter parameters (edge case — invalid params are ignored/clamped per spec, not hard errors, so 400 is reserved for structurally malformed requests only).
+
+    post:
+      summary: Submit a new property listing (FR-041, FR-045)
+      operationId: submitProperty
+      description: >
+        Used both by the public "Submit Property" form (registered users →
+        always enters pending review, FR-042) and by the Agent Dashboard's
+        "Add Property" action (FR-047 → publishes immediately per FR-061
+        when the account holds a publish capability). The resulting
+        `post_status` is determined server-side by capability, never by a
+        client-supplied flag.
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/PropertySubmission" }
+      responses:
+        "201":
+          description: Created (status depends on submitter's capability — pending or published).
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/PropertySummary" }
+        "400":
+          description: Validation failed (field-level errors returned).
+        "401":
+          description: Authentication required.
+        "429":
+          description: Rate limit exceeded (FR-056 — 3 submissions/visitor/hour).
+
+  /properties/{id}/related:
+    get:
+      summary: Related properties for a detail page (FR-024)
+      operationId: getRelatedProperties
+      security: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: A bounded list (max 6) of related properties.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/PropertySummary" }
+        "404":
+          description: Property not found or not published.
+
+  /properties/compare:
+    get:
+      summary: Fetch fresh data for a client-held comparison set (FR-022/023)
+      operationId: compareProperties
+      security: []
+      description: >
+        Not part of the original MVP contract — added alongside the
+        client-side-only Comparison feature (data-model.md §8, no server
+        persistence) so the comparison table can display real, current data
+        for the visitor's locally-held ID list. Functionally a thin,
+        4-capped wrapper over `GET /properties?ids=`.
+      parameters:
+        - name: ids
+          in: query
+          required: true
+          description: Comma-separated property IDs; only the first 4 are used.
+          schema: { type: string }
+      responses:
+        "200":
+          description: Up to 4 property summaries, in the requested order.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/PropertySummary" }
+
+  /agents/{id}:
+    patch:
+      summary: Update an agent's public profile (FR-034–FR-040)
+      operationId: updateAgentProfile
+      security:
+        - cookieAuth: []
+      description: >
+        Not part of the original MVP contract — added alongside the
+        agent profile-edit form (T076). Deliberately separate from
+        WordPress core's `/wp/v2/users` endpoint: this plugin's profile
+        usermeta is registered `show_in_rest: false` specifically so it is
+        NOT writable through that generic, non-owner-aware endpoint; this
+        endpoint enforces `manage_agent_profile` plus an explicit
+        own-ID-or-administrator check instead.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                bio: { type: string }
+                phone: { type: string }
+                whatsapp: { type: string }
+                license: { type: string }
+                office: { type: string }
+                areas: { type: array, items: { type: integer }, description: "location taxonomy term IDs" }
+                specializations: { type: array, items: { type: string } }
+                socials:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      platform: { type: string }
+                      url: { type: string }
+      responses:
+        "200":
+          description: Updated agent profile.
+        "403":
+          description: Caller may only edit their own profile (unless administrator/editor).
+        "404":
+          description: Agent not found.
+
+  /properties/{id}/moderate:
+    patch:
+      summary: Approve or reject a pending submission (FR-043)
+      operationId: moderateProperty
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [decision]
+              properties:
+                decision: { type: string, enum: [approve, reject] }
+                reason: { type: string }
+      responses:
+        "200":
+          description: Moderation applied; submitter notified.
+        "403":
+          description: Caller lacks moderation capability.
+        "404":
+          description: Submission not found or already moderated.
+
+  /favorites:
+    get:
+      summary: List the current user's favorites (FR-021)
+      operationId: listFavorites
+      security: [{ cookieAuth: [] }]
+      responses:
+        "200":
+          description: Favorited properties.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/PropertySummary" }
+        "401":
+          description: Not authenticated.
+    post:
+      summary: Toggle a favorite on/off (FR-019, FR-020)
+      operationId: toggleFavorite
+      security: [{ cookieAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [property_id]
+              properties:
+                property_id: { type: integer }
+      responses:
+        "200":
+          description: Updated favorite state.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  property_id: { type: integer }
+                  favorited: { type: boolean }
+        "401":
+          description: Not authenticated (guests favorite client-side only; see /favorites/merge).
+
+  /favorites/merge:
+    post:
+      summary: Merge guest (localStorage) favorites into the account on login (research.md §4)
+      operationId: mergeFavorites
+      security: [{ cookieAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                property_ids:
+                  type: array
+                  items: { type: integer }
+      responses:
+        "200":
+          description: Merged favorite list.
+        "401":
+          description: Not authenticated.
+
+  /inquiries:
+    post:
+      summary: Submit a property inquiry (FR-025, FR-026, FR-027)
+      operationId: createInquiry
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/InquirySubmission" }
+      responses:
+        "201":
+          description: Inquiry stored with status "New"; agent notified (FR-028).
+        "400":
+          description: Field-level validation errors.
+        "429":
+          description: Rate limit exceeded.
+    get:
+      summary: List inquiries visible to the caller (FR-029)
+      operationId: listInquiries
+      security: [{ cookieAuth: [] }]
+      parameters:
+        - name: status
+          in: query
+          schema: { type: string }
+        - name: assigned_to
+          in: query
+          schema: { type: integer }
+      responses:
+        "200":
+          description: >
+            Inquiries scoped to the caller's authorization — agents see only
+            their assigned inquiries; administrators/editors see all (FR-038).
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Inquiry" }
+        "401":
+          description: Not authenticated.
+
+  /inquiries/{id}:
+    patch:
+      summary: Update inquiry status, assignment, or notes (FR-029)
+      operationId: updateInquiry
+      security: [{ cookieAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status: { type: string, enum: [New, Contacted, Qualified, "Viewing Scheduled", Closed, Spam] }
+                assigned_agent_id: { type: integer }
+                note: { type: string }
+      responses:
+        "200":
+          description: Updated inquiry.
+        "403":
+          description: Caller not authorized for this inquiry (FR-038).
+        "404":
+          description: Inquiry not found.
+
+  /viewings:
+    post:
+      summary: Request a property viewing (FR-030, FR-031)
+      operationId: createViewingRequest
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ViewingRequestSubmission" }
+      responses:
+        "201":
+          description: Viewing request stored with status "Requested"; agent notified (FR-033).
+        "400":
+          description: Validation failed (e.g., past date rejected per FR-031).
+        "429":
+          description: Rate limit exceeded.
+
+  /viewings/{id}:
+    patch:
+      summary: Update viewing request status (FR-032)
+      operationId: updateViewingRequest
+      security: [{ cookieAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status: { type: string, enum: [Requested, Confirmed, Rescheduled, Completed, Cancelled] }
+      responses:
+        "200":
+          description: Updated viewing request.
+        "403":
+          description: Caller not authorized.
+        "404":
+          description: Viewing request not found.
+
+  /uploads:
+    post:
+      summary: Upload a property image, returning an attachment ID (FR-044/046)
+      operationId: uploadPropertyImage
+      security:
+        - cookieAuth: []
+      description: >
+        Not part of the original MVP contract — added alongside secure
+        image upload handling (T081). Deliberately separate from WordPress
+        core's `/wp/v2/media`, which requires the `upload_files`
+        capability that the `subscriber` role (FR-041's audience) does not
+        hold; any authenticated user may call this endpoint, with content
+        type/size validated server-side (JPG/PNG/WEBP only, 5MB max,
+        content-sniffed rather than extension-trusted) as the actual
+        security boundary. NOT subject to FR-056's shared rate limit — a
+        single property submission legitimately needs several uploads.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file: { type: string, format: binary }
+      responses:
+        "201":
+          description: Uploaded; returns the new attachment ID.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  attachment_id: { type: integer }
+                  url: { type: string, format: uri }
+        "400":
+          description: Invalid file type, oversized, or empty.
+        "401":
+          description: Authentication required.
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: wordpress_logged_in
+      description: >
+        Standard WordPress cookie session auth plus a valid REST nonce
+        (X-WP-Nonce header) on every state-changing request, per FR-045 and
+        constitution Principle II. All capability checks are re-verified
+        server-side regardless of client-supplied role claims.
+  schemas:
+    PropertySummary:
+      type: object
+      properties:
+        id: { type: integer }
+        title: { type: string }
+        price: { type: number }
+        currency: { type: string }
+        listing_type: { type: string }
+        property_type: { type: string }
+        status: { type: string }
+        bedrooms: { type: integer }
+        bathrooms: { type: integer }
+        area: { type: number }
+        city: { type: string }
+        featured_image: { type: string, format: uri }
+        permalink: { type: string, format: uri }
+        latitude: { type: number, nullable: true }
+        longitude: { type: number, nullable: true }
+    PropertySubmission:
+      type: object
+      required: [title, description, price, listing_type, property_type, location, contact]
+      properties:
+        title: { type: string }
+        description: { type: string }
+        price: { type: number, minimum: 0 }
+        listing_type: { type: string }
+        property_type: { type: string }
+        bedrooms: { type: integer }
+        bathrooms: { type: integer }
+        area: { type: number }
+        location:
+          type: object
+          properties:
+            country: { type: string }
+            state: { type: string }
+            city: { type: string }
+            area: { type: string }
+            address: { type: string }
+        amenities:
+          type: array
+          items: { type: string }
+        images:
+          type: array
+          items: { type: integer, description: "Pre-uploaded media attachment IDs" }
+        contact:
+          type: object
+          properties:
+            name: { type: string }
+            email: { type: string, format: email }
+            phone: { type: string }
+    Inquiry:
+      type: object
+      properties:
+        id: { type: integer }
+        property_id: { type: integer }
+        name: { type: string }
+        email: { type: string, format: email }
+        phone: { type: string }
+        message: { type: string }
+        preferred_contact_method: { type: string }
+        status: { type: string }
+        assigned_agent_id: { type: integer }
+        submitted_at: { type: string, format: date-time }
+    InquirySubmission:
+      type: object
+      required: [property_id, name, email, message, preferred_contact_method]
+      properties:
+        property_id: { type: integer }
+        name: { type: string }
+        email: { type: string, format: email }
+        phone: { type: string }
+        message: { type: string }
+        preferred_contact_method: { type: string, enum: [phone, email, whatsapp] }
+        preferred_viewing_date: { type: string, format: date }
+        budget: { type: number }
+        honeypot: { type: string, description: "Must be empty; anti-spam field (FR-056)." }
+    ViewingRequestSubmission:
+      type: object
+      required: [property_id, name, email, phone, preferred_date, preferred_time]
+      properties:
+        property_id: { type: integer }
+        name: { type: string }
+        email: { type: string, format: email }
+        phone: { type: string }
+        preferred_date: { type: string, format: date }
+        preferred_time: { type: string }
+        message: { type: string }
+        honeypot: { type: string }

@@ -1,0 +1,87 @@
+{
+  "flow_name": "{{FLOW_NAME}}",
+  "description": "{{FLOW_DESCRIPTION}}",
+  "trigger_intents": ["{{INTENT_1}}", "{{INTENT_2}}"],
+  "nodes": [
+    {
+      "id": "start",
+      "type": "message",
+      "message": "{{GREETING_MESSAGE}}",
+      "next": "collect_info"
+    },
+    {
+      "id": "collect_info",
+      "type": "slot_collection",
+      "slots": [
+        {
+          "name": "{{SLOT_NAME_1}}",
+          "type": "text",
+          "prompt": "{{SLOT_PROMPT_1}}",
+          "validation": {
+            "required": true,
+            "pattern": "{{VALIDATION_PATTERN}}"
+          }
+        },
+        {
+          "name": "{{SLOT_NAME_2}}",
+          "type": "date",
+          "prompt": "{{SLOT_PROMPT_2}}",
+          "validation": {
+            "required": true
+          }
+        }
+      ],
+      "next": "confirm"
+    },
+    {
+      "id": "confirm",
+      "type": "confirmation",
+      "message": "{{CONFIRMATION_MESSAGE}}",
+      "on_confirm": "execute_action",
+      "on_reject": "collect_info"
+    },
+    {
+      "id": "execute_action",
+      "type": "action",
+      "action": "{{ACTION_NAME}}",
+      "on_success": "success",
+      "on_failure": "failure"
+    },
+    {
+      "id": "success",
+      "type": "message",
+      "message": "{{SUCCESS_MESSAGE}}",
+      "next": "end"
+    },
+    {
+      "id": "failure",
+      "type": "message",
+      "message": "{{FAILURE_MESSAGE}}",
+      "options": [
+        {
+          "text": "Try again",
+          "next": "collect_info"
+        },
+        {
+          "text": "Contact support",
+          "next": "escalate"
+        }
+      ]
+    },
+    {
+      "id": "escalate",
+      "type": "escalation",
+      "message": "Let me connect you with a team member.",
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "type": "end"
+    }
+  ],
+  "error_handling": {
+    "max_retries": 3,
+    "fallback_node": "escalate",
+    "timeout_seconds": 300
+  }
+}

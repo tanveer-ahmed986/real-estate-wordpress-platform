@@ -1,0 +1,25 @@
+<!-- wp:template-part {"slug":"header","tagName":"header"} /-->
+
+<!-- wp:group {"tagName":"main","className":"pe-main","layout":{"type":"constrained"}} -->
+<main class="wp-block-group pe-main" id="pe-main-content">
+	<!-- wp:post-featured-image {"isLink":false} /-->
+
+	<!-- wp:post-title {"level":1} /-->
+
+	<!-- wp:group {"className":"pe-insight-meta","layout":{"type":"flex"}} -->
+	<div class="wp-block-group pe-insight-meta">
+		<!-- wp:post-author-name /-->
+		<!-- wp:post-date /-->
+		<!-- wp:post-terms {"term":"insight_category"} /-->
+	</div>
+	<!-- /wp:group -->
+
+	<!-- wp:post-content {"layout":{"type":"constrained"}} /-->
+
+	<!-- wp:shortcode -->
+	[primeestate_related_properties]
+	<!-- /wp:shortcode -->
+</main>
+<!-- /wp:group -->
+
+<!-- wp:template-part {"slug":"footer","tagName":"footer"} /-->

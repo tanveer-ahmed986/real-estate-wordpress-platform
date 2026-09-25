@@ -1,0 +1,2389 @@
+# Real Estate WordPress Platform
+
+## Complete Specification & Architecture
+
+**Project Name:** PrimeEstate
+**Project Type:** Real Estate Management & Property Listing Platform
+**Platform:** WordPress
+**CMS:** WordPress
+**Development Methodology:** Specification-Driven Development (SDD)
+**Primary Development Agent:** Claude Code
+**Primary Plugin:** Custom PrimeEstate Core Plugin
+**Theme:** Custom PrimeEstate Theme
+**Target:** Portfolio / Production-Grade Demonstration
+
+---
+
+# 1. PROJECT VISION
+
+Build a premium, production-quality real estate platform using WordPress.
+
+The platform must demonstrate that the developer can build a **custom WordPress application**, rather than simply install and configure an existing real estate theme.
+
+PrimeEstate will allow:
+
+* Real estate companies to publish properties
+* Agents to manage listings
+* Visitors to search properties
+* Visitors to filter properties
+* Visitors to view detailed property information
+* Visitors to contact agents
+* Visitors to save favorite properties
+* Visitors to compare properties
+* Agents to manage their profiles
+* Administrators to manage the entire platform
+* Property owners to submit property listings
+* Users to request property viewings
+* Users to submit property inquiries
+
+The platform must be:
+
+* Modern
+* Professional
+* Responsive
+* Secure
+* SEO-friendly
+* Accessible
+* Fast
+* Maintainable
+* Scalable
+
+---
+
+# 2. PORTFOLIO OBJECTIVE
+
+This project is intended to demonstrate the following skills:
+
+```text
+WordPress
+Custom Theme Development
+Custom Plugin Development
+PHP
+MySQL
+Custom Post Types
+Custom Taxonomies
+Advanced Queries
+REST API
+AJAX
+JavaScript
+Responsive UI/UX
+Real Estate UX
+Search & Filtering
+User Management
+Agent Management
+Security
+SEO
+Performance Optimization
+Accessibility
+SDD
+```
+
+The final website should be suitable for:
+
+* Upwork portfolio
+* Fiverr portfolio
+* Personal portfolio
+* Z&T Technologies portfolio
+* Client demonstrations
+
+---
+
+# 3. DEVELOPMENT PHILOSOPHY
+
+This project MUST NOT be implemented as a generic purchased real estate theme.
+
+Avoid relying on large multipurpose themes.
+
+The architecture must prioritize:
+
+1. WordPress-native functionality
+2. Custom reusable components
+3. Custom plugin architecture
+4. WordPress APIs
+5. Secure data handling
+6. Performance
+7. Accessibility
+8. SEO
+9. Maintainability
+10. Scalability
+
+Do not modify WordPress core.
+
+Do not modify third-party plugin source code.
+
+Do not place business-critical functionality exclusively inside the theme.
+
+---
+
+# 4. SDD WORKFLOW
+
+Claude Code MUST read the entire specification before implementation.
+
+The implementation workflow must be:
+
+```text
+Requirements
+     ↓
+Constitution
+     ↓
+Architecture
+     ↓
+Data Model
+     ↓
+UI/UX Specification
+     ↓
+Implementation Plan
+     ↓
+Feature Development
+     ↓
+Testing
+     ↓
+Security Review
+     ↓
+Performance Review
+     ↓
+SEO Review
+     ↓
+Deployment
+```
+
+Before implementation Claude Code MUST identify:
+
+* Ambiguous requirements
+* Technical dependencies
+* Security risks
+* Performance risks
+* Data relationships
+* WordPress limitations
+* Required plugins
+* Required custom functionality
+
+If an important requirement is ambiguous, document the assumption rather than silently inventing behavior.
+
+---
+
+# 5. SPECIFICATION FILE STRUCTURE
+
+Create and maintain:
+
+```text
+specs/
+├── constitution.md
+├── requirements.md
+├── architecture.md
+├── design-system.md
+├── wordpress-architecture.md
+├── property-model.md
+├── agent-model.md
+├── user-model.md
+├── search-filtering.md
+├── inquiry-system.md
+├── favorites-comparison.md
+├── security.md
+├── seo.md
+├── performance.md
+├── accessibility.md
+├── testing.md
+├── deployment.md
+└── portfolio.md
+```
+
+---
+
+# 6. BRAND
+
+## Brand Name
+
+PrimeEstate
+
+## Tagline
+
+**Find a place you'll love to call home.**
+
+## Brand Positioning
+
+Premium digital real estate platform.
+
+Target audience:
+
+* Property buyers
+* Property sellers
+* Tenants
+* Landlords
+* Real estate agencies
+* Property investors
+* Real estate agents
+* Developers
+
+Brand personality:
+
+* Professional
+* Trustworthy
+* Modern
+* Premium
+* Clear
+* Human
+
+---
+
+# 7. DESIGN DIRECTION
+
+The website should resemble a premium international real estate platform.
+
+Visual characteristics:
+
+* Editorial layouts
+* Large property photography
+* Strong typography
+* Clean grids
+* Generous whitespace
+* High-quality cards
+* Clear CTAs
+* Sophisticated micro-interactions
+* Professional map/search experience
+
+Avoid:
+
+* Generic WordPress appearance
+* Cheap template aesthetics
+* Excessive gradients
+* Excessive rounded cards
+* Excessive animations
+* Visual clutter
+
+The interface should prioritize usability.
+
+---
+
+# 8. RESPONSIVE DESIGN
+
+Support:
+
+```text
+320px
+375px
+390px
+414px
+768px
+1024px
+1280px
+1440px
+1920px
+```
+
+Mobile must be intentionally designed rather than simply scaled down.
+
+---
+
+# 9. TECHNOLOGY STACK
+
+Required:
+
+* WordPress
+* PHP
+* MySQL/MariaDB
+* HTML5
+* CSS
+* JavaScript
+
+Recommended:
+
+* Gutenberg / WordPress blocks
+* WordPress REST API
+* WP-CLI
+* WordPress Custom Post Types
+* WordPress Custom Taxonomies
+
+Avoid introducing Next.js/React as the primary frontend.
+
+This project exists specifically to demonstrate WordPress development.
+
+---
+
+# 10. PROJECT STRUCTURE
+
+The final project MUST follow a structure similar to:
+
+```text
+primeestate/
+│
+├── README.md
+├── LICENSE
+├── .gitignore
+├── composer.json
+├── package.json
+│
+├── specs/
+│   ├── constitution.md
+│   ├── requirements.md
+│   ├── architecture.md
+│   ├── design-system.md
+│   ├── wordpress-architecture.md
+│   ├── property-model.md
+│   ├── agent-model.md
+│   ├── user-model.md
+│   ├── search-filtering.md
+│   ├── inquiry-system.md
+│   ├── favorites-comparison.md
+│   ├── security.md
+│   ├── seo.md
+│   ├── performance.md
+│   ├── accessibility.md
+│   ├── testing.md
+│   ├── deployment.md
+│   └── portfolio.md
+│
+├── wp-content/
+│   │
+│   ├── themes/
+│   │   └── primeestate/
+│   │       │
+│   │       ├── assets/
+│   │       │   ├── css/
+│   │       │   ├── js/
+│   │       │   ├── images/
+│   │       │   └── icons/
+│   │       │
+│   │       ├── inc/
+│   │       │   ├── setup.php
+│   │       │   ├── enqueue.php
+│   │       │   ├── navigation.php
+│   │       │   ├── template-functions.php
+│   │       │   ├── breadcrumbs.php
+│   │       │   └── accessibility.php
+│   │       │
+│   │       ├── components/
+│   │       │   ├── property-card/
+│   │       │   ├── agent-card/
+│   │       │   ├── search-form/
+│   │       │   ├── filter-panel/
+│   │       │   ├── map/
+│   │       │   └── testimonial/
+│   │       │
+│   │       ├── patterns/
+│   │       ├── parts/
+│   │       ├── templates/
+│   │       ├── languages/
+│   │       │
+│   │       ├── functions.php
+│   │       ├── style.css
+│   │       ├── theme.json
+│   │       └── screenshot.png
+│   │
+│   └── plugins/
+│       │
+│       └── primeestate-core/
+│           │
+│           ├── assets/
+│           │   ├── css/
+│           │   └── js/
+│           │
+│           ├── includes/
+│           │   ├── post-types/
+│           │   │   └── property.php
+│           │   │
+│           │   ├── taxonomies/
+│           │   │   ├── property-type.php
+│           │   │   ├── property-status.php
+│           │   │   ├── location.php
+│           │   │   ├── amenity.php
+│           │   │   └── property-feature.php
+│           │   │
+│           │   ├── meta/
+│           │   │   └── property-meta.php
+│           │   │
+│           │   ├── agents/
+│           │   │   ├── agent-profile.php
+│           │   │   └── agent-permissions.php
+│           │   │
+│           │   ├── inquiries/
+│           │   │   ├── inquiry-handler.php
+│           │   │   └── inquiry-post-type.php
+│           │   │
+│           │   ├── favorites/
+│           │   │   └── favorites.php
+│           │   │
+│           │   ├── comparison/
+│           │   │   └── comparison.php
+│           │   │
+│           │   ├── viewing/
+│           │   │   └── viewing-request.php
+│           │   │
+│           │   ├── search/
+│           │   │   ├── property-query.php
+│           │   │   └── search-api.php
+│           │   │
+│           │   ├── rest/
+│           │   │   └── rest-routes.php
+│           │   │
+│           │   ├── admin/
+│           │   │   ├── dashboard.php
+│           │   │   └── columns.php
+│           │   │
+│           │   └── security/
+│           │       └── security.php
+│           │
+│           ├── database/
+│           │   └── migrations/
+│           │
+│           ├── templates/
+│           │
+│           ├── primeestate-core.php
+│           └── uninstall.php
+│
+├── tests/
+│   ├── unit/
+│   ├── integration/
+│   └── e2e/
+│
+└── docs/
+    ├── setup.md
+    ├── deployment.md
+    ├── admin-guide.md
+    └── api.md
+```
+
+The exact structure may be adjusted if Claude Code determines that WordPress conventions require a better organization. Any significant architectural change must be documented.
+
+---
+
+# 11. CUSTOM POST TYPES
+
+The primary custom post type is:
+
+```text
+property
+```
+
+Optional:
+
+```text
+inquiry
+```
+
+Do NOT create an unnecessary custom post type for agents if WordPress users can appropriately represent agent accounts.
+
+---
+
+# 12. PROPERTY DATA MODEL
+
+Each property must support:
+
+## Basic
+
+* Property title
+* Property description
+* Short description
+* Property ID
+* SKU/reference number
+* Featured image
+* Gallery
+* Status
+
+## Pricing
+
+* Price
+* Price type
+* Currency
+* Previous price
+* Negotiable flag
+
+## Property Details
+
+* Property type
+* Listing type
+* Bedrooms
+* Bathrooms
+* Living rooms
+* Parking spaces
+* Property area
+* Land area
+* Year built
+* Floor
+* Total floors
+
+## Location
+
+* Country
+* State/province
+* City
+* Area/neighborhood
+* Address
+* Postal code
+* Latitude
+* Longitude
+
+## Features
+
+* Furnished
+* Balcony
+* Garden
+* Garage
+* Swimming pool
+* Security
+* Elevator
+* Air conditioning
+* Heating
+* Solar
+* Generator
+* Parking
+
+---
+
+# 13. PROPERTY TAXONOMIES
+
+Create:
+
+## Property Type
+
+Examples:
+
+```text
+Apartment
+House
+Villa
+Office
+Shop
+Warehouse
+Land
+Farmhouse
+Penthouse
+Commercial Building
+```
+
+## Listing Type
+
+```text
+For Sale
+For Rent
+For Lease
+```
+
+## Property Status
+
+```text
+Available
+Pending
+Sold
+Rented
+Off Market
+```
+
+## Location
+
+Hierarchical taxonomy where appropriate:
+
+```text
+Country
+    └── State/Province
+          └── City
+                └── Area
+```
+
+## Amenities
+
+Examples:
+
+```text
+Swimming Pool
+Gym
+Parking
+Security
+Elevator
+Garden
+Balcony
+Central Air
+Backup Generator
+Solar
+```
+
+---
+
+# 14. PROPERTY GALLERY
+
+Property listings must support multiple images.
+
+Requirements:
+
+* Featured image
+* Gallery
+* Image thumbnails
+* Lightbox
+* Fullscreen
+* Mobile swipe
+* Lazy loading
+
+Images must be optimized.
+
+Do not load the full-resolution gallery until required.
+
+---
+
+# 15. PROPERTY DETAIL PAGE
+
+Property detail page must include:
+
+```text
+Property Gallery
+
+Property Title
+Location
+Price
+Listing Status
+
+Bedrooms
+Bathrooms
+Area
+Parking
+
+Description
+
+Key Features
+
+Amenities
+
+Property Details
+
+Location
+
+Agent
+
+Contact Agent
+
+Request Viewing
+
+Save Property
+
+Compare
+
+Related Properties
+```
+
+---
+
+# 16. PROPERTY SEARCH
+
+The homepage must contain a prominent property search interface.
+
+Search options:
+
+```text
+Buy
+Rent
+```
+
+Filters:
+
+* Location
+* Property type
+* Price minimum
+* Price maximum
+* Bedrooms
+* Bathrooms
+* Area minimum
+* Area maximum
+* Amenities
+* Property status
+
+Primary CTA:
+
+**Search Properties**
+
+---
+
+# 17. ADVANCED FILTERING
+
+The property archive must support advanced filtering.
+
+Filters:
+
+```text
+Property Type
+Listing Type
+Price
+Bedrooms
+Bathrooms
+Area
+Location
+Amenities
+Status
+```
+
+Sorting:
+
+```text
+Newest
+Price Low → High
+Price High → Low
+Largest Area
+Most Relevant
+```
+
+Filtering should preferably use AJAX without full page reload.
+
+However, SEO-friendly URLs must remain available.
+
+Example:
+
+```text
+/properties/?city=karachi&type=apartment&listing=sale
+```
+
+---
+
+# 18. SEARCH URL STATE
+
+Filter state should be reflected in URLs where technically appropriate.
+
+Example:
+
+```text
+/properties/
+?listing=sale
+&city=karachi
+&type=apartment
+&min_price=50000
+&max_price=200000
+&bedrooms=3
+```
+
+Users must be able to copy/share a filtered search URL.
+
+---
+
+# 19. PROPERTY MAP
+
+Implement a map-based property discovery interface.
+
+The map should display property locations.
+
+Clicking a marker should show:
+
+* Property image
+* Property name
+* Price
+* Location
+* CTA
+
+Example:
+
+```text
+Map
+ ├── Marker
+ │    └── Property Preview
+ │
+ ├── Marker
+ │    └── Property Preview
+ │
+ └── Marker
+      └── Property Preview
+```
+
+The map provider must be configurable.
+
+Do not hardcode API keys.
+
+If a paid map API is unavailable during development, provide a graceful fallback.
+
+---
+
+# 20. PROPERTY CARD
+
+Every property card should include:
+
+* Image
+* Listing status
+* Property type
+* Price
+* Property title
+* Location
+* Bedrooms
+* Bathrooms
+* Area
+* Favorite button
+* Compare button
+
+Hover interactions should be subtle.
+
+Cards must remain accessible on mobile.
+
+---
+
+# 21. AGENT SYSTEM
+
+Create a professional agent system.
+
+Agent profile should support:
+
+* Name
+* Profile image
+* Biography
+* Phone
+* Email
+* WhatsApp/contact option
+* License number
+* Office
+* Areas served
+* Specializations
+* Social links
+
+Agent profile page:
+
+```text
+Agent Profile
+     ↓
+About
+     ↓
+Contact
+     ↓
+Properties
+     ↓
+Reviews
+```
+
+---
+
+# 22. AGENT USER ROLES
+
+Create appropriate roles.
+
+Possible roles:
+
+```text
+Administrator
+Editor
+Agent
+Property Manager
+Registered User
+```
+
+Agents must NOT automatically receive administrator privileges.
+
+Use WordPress capabilities.
+
+Example:
+
+```text
+manage_properties
+edit_properties
+publish_properties
+delete_properties
+view_inquiries
+manage_agent_profile
+```
+
+Only administrators can manage system-wide settings.
+
+---
+
+# 23. PROPERTY OWNER SUBMISSION
+
+Provide a front-end property submission workflow.
+
+A registered user can:
+
+1. Log in
+2. Open "Submit Property"
+3. Enter property information
+4. Upload images
+5. Submit listing
+6. Listing enters pending review
+7. Administrator/authorized editor reviews it
+8. Listing is approved or rejected
+
+Never automatically publish user-submitted properties.
+
+---
+
+# 24. PROPERTY SUBMISSION FORM
+
+Fields:
+
+* Property title
+* Description
+* Price
+* Listing type
+* Property type
+* Bedrooms
+* Bathrooms
+* Area
+* Location
+* Address
+* Amenities
+* Images
+* Contact details
+
+Security requirements:
+
+* Authentication
+* Nonce
+* Capability checks
+* Input validation
+* Input sanitization
+* File type validation
+* File size limits
+
+---
+
+# 25. FAVORITES
+
+Visitors/users can save properties.
+
+For logged-in users:
+
+```text
+User
+ ↓
+Favorite Property
+ ↓
+Saved Properties
+```
+
+For guest users:
+
+Use local browser storage/cookie mechanism where appropriate.
+
+Users must be able to:
+
+* Save
+* Remove
+* View saved properties
+
+---
+
+# 26. PROPERTY COMPARISON
+
+Implement property comparison.
+
+Users can select multiple properties.
+
+Comparison should show:
+
+```text
+                 Property A   Property B   Property C
+
+Price
+Bedrooms
+Bathrooms
+Area
+Property Type
+Location
+Parking
+Amenities
+Status
+```
+
+Limit comparison to a reasonable number, such as 3–4 properties.
+
+The comparison interface must remain usable on mobile.
+
+---
+
+# 27. INQUIRY SYSTEM
+
+Visitors must be able to contact:
+
+* Agent
+* Property owner
+* Agency
+
+Inquiry form:
+
+```text
+Name
+Email
+Phone
+Property
+Message
+Preferred contact method
+```
+
+Optional:
+
+```text
+Preferred viewing date
+Budget
+```
+
+---
+
+# 28. INQUIRY STORAGE
+
+Do not simply send an email and discard the inquiry.
+
+Store inquiries securely in WordPress.
+
+Each inquiry should include:
+
+* Name
+* Email
+* Phone
+* Property
+* Agent
+* Message
+* Date
+* Status
+
+Statuses:
+
+```text
+New
+Contacted
+Qualified
+Viewing Scheduled
+Closed
+Spam
+```
+
+---
+
+# 29. INQUIRY ADMIN
+
+Administrators/authorized agents should be able to:
+
+* View inquiries
+* Filter inquiries
+* Change status
+* Assign inquiry
+* Add internal notes
+
+Agents must only see inquiries they are authorized to access.
+
+---
+
+# 30. PROPERTY VIEWING REQUEST
+
+Users can request a property viewing.
+
+Form:
+
+```text
+Name
+Email
+Phone
+Property
+Preferred Date
+Preferred Time
+Message
+```
+
+Viewing request status:
+
+```text
+Requested
+Confirmed
+Rescheduled
+Completed
+Cancelled
+```
+
+The system must not automatically guarantee availability.
+
+---
+
+# 31. USER DASHBOARD
+
+Registered users should have:
+
+```text
+Dashboard
+My Favorites
+My Comparisons
+My Inquiries
+Viewing Requests
+Account Settings
+Logout
+```
+
+---
+
+# 32. AGENT DASHBOARD
+
+Agents should have:
+
+```text
+Dashboard
+My Properties
+Add Property
+Edit Property
+Property Status
+My Inquiries
+Viewing Requests
+Profile
+```
+
+Agents must only access authorized data.
+
+---
+
+# 33. ADMIN DASHBOARD
+
+Create a useful WordPress admin overview.
+
+Display:
+
+```text
+Total Properties
+Active Properties
+Sold
+Rented
+Pending Approval
+Agents
+Users
+New Inquiries
+Viewing Requests
+```
+
+Also show:
+
+* Recent properties
+* Recent inquiries
+* Recent submissions
+
+Do not unnecessarily duplicate WordPress functionality.
+
+---
+
+# 34. RELATED PROPERTIES
+
+Property detail pages must display relevant properties.
+
+Matching signals can include:
+
+* Same city
+* Same property type
+* Similar price
+* Similar bedroom count
+* Same listing type
+
+Do not create expensive database queries for every request.
+
+Optimize queries.
+
+---
+
+# 35. PROPERTY RECOMMENDATION
+
+Create a simple recommendation system.
+
+Example:
+
+User views:
+
+```text
+3-bedroom apartment
+Karachi
+PKR 25M
+```
+
+Recommended properties should prioritize:
+
+```text
+Same city
+Similar type
+Similar price
+Similar bedrooms
+```
+
+Document the recommendation algorithm.
+
+---
+
+# 36. BLOG
+
+Create:
+
+**PrimeEstate Insights**
+
+Categories:
+
+* Buying Guide
+* Selling Guide
+* Investment
+* Market Insights
+* Interior Design
+* Neighborhood Guides
+
+Posts should support:
+
+* Featured image
+* Author
+* Date
+* Category
+* Related properties
+
+---
+
+# 37. HOMEPAGE
+
+Homepage structure:
+
+```text
+Header
+   ↓
+Hero
+   ↓
+Property Search
+   ↓
+Featured Properties
+   ↓
+Browse By Property Type
+   ↓
+Featured Locations
+   ↓
+Why PrimeEstate
+   ↓
+Featured Agents
+   ↓
+Latest Listings
+   ↓
+Market Insights
+   ↓
+CTA
+   ↓
+Footer
+```
+
+---
+
+# 38. HERO
+
+Headline:
+
+> Find a place you'll love to call home.
+
+Supporting text:
+
+> Discover homes, apartments, commercial spaces and investment opportunities from trusted real estate professionals.
+
+Primary CTA:
+
+**Explore Properties**
+
+Secondary CTA:
+
+**List Your Property**
+
+---
+
+# 39. FEATURED LOCATIONS
+
+Create demo locations.
+
+For example:
+
+```text
+Karachi
+Lahore
+Islamabad
+Dubai
+London
+Toronto
+```
+
+The architecture must remain location-agnostic.
+
+---
+
+# 40. PROPERTY TYPES
+
+Create visual category sections:
+
+```text
+Apartments
+Houses
+Villas
+Commercial
+Land
+Luxury Properties
+```
+
+---
+
+# 41. TRUST SECTION
+
+Display:
+
+* Verified Listings
+* Trusted Agents
+* Secure Inquiries
+* Expert Support
+
+Do not make unverifiable claims such as "10,000+ verified properties" unless actual data exists.
+
+---
+
+# 42. SEO
+
+Implement SEO-friendly architecture.
+
+Requirements:
+
+* Semantic HTML
+* Correct heading hierarchy
+* SEO-friendly URLs
+* Canonical URLs
+* Breadcrumbs
+* XML sitemap compatibility
+* Open Graph metadata
+* Property structured data where appropriate
+* Organization structured data
+* Article structured data
+* Location-friendly URLs
+
+Example:
+
+```text
+/properties/
+/properties/karachi/
+/properties/karachi/dha/
+/property/modern-3-bedroom-villa-dha-karachi/
+```
+
+Do not create duplicate URLs that produce indexable duplicate content.
+
+---
+
+# 43. ACCESSIBILITY
+
+Target:
+
+**WCAG 2.2 AA**
+
+Requirements:
+
+* Keyboard navigation
+* Focus indicators
+* Semantic HTML
+* Accessible forms
+* Proper labels
+* Alt text
+* Accessible dialogs
+* Accessible map fallback
+* Sufficient contrast
+* Screen-reader-friendly controls
+
+Map functionality MUST have a non-map alternative.
+
+---
+
+# 44. PERFORMANCE
+
+Target excellent Core Web Vitals.
+
+Requirements:
+
+* Optimized images
+* WebP/AVIF where supported
+* Lazy loading
+* Proper image dimensions
+* Minimal JavaScript
+* Efficient queries
+* Pagination
+* Query optimization
+* Conditional asset loading
+* Browser caching compatibility
+
+Avoid loading map scripts on pages that do not require maps.
+
+Avoid loading comparison scripts on unrelated pages.
+
+---
+
+# 45. SECURITY
+
+Follow WordPress security standards.
+
+Requirements:
+
+* Sanitize input
+* Validate input
+* Escape output
+* Use nonces
+* Capability checks
+* Secure AJAX requests
+* Secure REST API
+* File upload validation
+* MIME validation
+* File size limits
+* Prevent SQL injection
+* Prevent XSS
+* Prevent CSRF
+* Prevent privilege escalation
+
+Never trust:
+
+* URL parameters
+* POST data
+* AJAX requests
+* REST requests
+* Uploaded files
+* User-submitted property information
+
+---
+
+# 46. FILE UPLOAD SECURITY
+
+Property images uploaded by users must:
+
+* Require authentication
+* Validate file types
+* Validate MIME types
+* Validate file size
+* Use WordPress media APIs
+* Prevent executable uploads
+* Sanitize filenames
+
+Never allow arbitrary file extensions.
+
+---
+
+# 47. REST API
+
+Create custom REST endpoints only when necessary.
+
+Potential endpoints:
+
+```text
+/wp-json/primeestate/v1/properties
+/wp-json/primeestate/v1/search
+/wp-json/primeestate/v1/favorites
+/wp-json/primeestate/v1/inquiries
+/wp-json/primeestate/v1/viewings
+```
+
+Every endpoint must define:
+
+* Permission callback
+* Input validation
+* Sanitization
+* Response schema
+* Error handling
+
+Do not expose private user data through public endpoints.
+
+---
+
+# 48. AJAX
+
+AJAX may be used for:
+
+* Property filtering
+* Favorites
+* Comparison
+* Inquiry submission
+* Viewing requests
+* Search suggestions
+
+Every state-changing request must use proper security controls.
+
+---
+
+# 49. DATABASE STRATEGY
+
+Prefer WordPress-native storage.
+
+Use:
+
+* Custom Post Type
+* Post Meta
+* Taxonomies
+* User Meta
+
+Do not create custom database tables unless there is a demonstrated requirement.
+
+If custom tables become necessary due to search/performance requirements, document:
+
+* Schema
+* Indexes
+* Migration
+* Cleanup
+* Backup considerations
+
+---
+
+# 50. CACHING
+
+Architecture must be compatible with:
+
+* Page caching
+* Object caching
+* CDN
+
+Do not cache personalized user data.
+
+Examples:
+
+Do not cache:
+
+```text
+User dashboard
+Favorites
+Private inquiries
+Agent dashboard
+```
+
+---
+
+# 51. EMAIL
+
+Email notifications may include:
+
+## New Inquiry
+
+To:
+
+* Assigned agent
+* Administrator where configured
+
+## Property Submission
+
+To:
+
+* Administrator/reviewer
+
+## Property Approved
+
+To:
+
+* Property submitter
+
+## Viewing Request
+
+To:
+
+* Assigned agent
+
+Emails must not expose sensitive information unnecessarily.
+
+---
+
+# 52. ANTI-SPAM
+
+Forms should support appropriate anti-spam mechanisms.
+
+Possible:
+
+* Honeypot
+* Rate limiting
+* CAPTCHA where appropriate
+* Server-side validation
+
+Do not make forms unnecessarily difficult for users.
+
+---
+
+# 53. ANALYTICS
+
+Architecture should support:
+
+* Google Analytics
+* Google Tag Manager
+* Meta Pixel
+
+Tracking IDs must be configurable.
+
+Do not hardcode credentials.
+
+Respect applicable privacy requirements.
+
+---
+
+# 54. DEMO DATA
+
+Create at least:
+
+**50 property listings**
+
+Distribution:
+
+```text
+20 Apartments
+10 Houses
+8 Villas
+5 Commercial
+4 Land
+3 Luxury
+```
+
+Include:
+
+* Multiple cities
+* Multiple prices
+* Sale/rent listings
+* Multiple statuses
+* Different bedroom counts
+* Different amenities
+* Multiple agents
+
+The demo must feel like a real platform.
+
+---
+
+# 55. DEMO AGENTS
+
+Create at least:
+
+**8 agents**
+
+Each should have:
+
+* Name
+* Professional profile image
+* Biography
+* Specialization
+* Phone
+* Email
+* Locations served
+* Properties
+
+Use fictional identities and clearly treat them as demo content.
+
+Do not use real people's personal information.
+
+---
+
+# 56. SEED DATA
+
+Create a repeatable seed mechanism.
+
+Preferred:
+
+```text
+WP-CLI
+```
+
+or a controlled importer.
+
+The seed process should generate:
+
+* Properties
+* Agents
+* Taxonomies
+* Amenities
+* Demo users
+* Example inquiries
+
+It must be possible to reset/recreate demo data without manually entering everything.
+
+---
+
+# 57. TESTING
+
+Testing MUST cover:
+
+## Functional
+
+* Homepage
+* Search
+* Filtering
+* Sorting
+* Property detail
+* Gallery
+* Favorites
+* Comparison
+* Inquiry
+* Viewing request
+* Registration
+* Login
+* Agent dashboard
+* Property submission
+* Admin management
+
+## Responsive
+
+Test:
+
+```text
+320px
+375px
+390px
+414px
+768px
+1024px
+1280px
+1440px
+```
+
+## Browsers
+
+Test:
+
+* Chrome
+* Edge
+* Firefox
+* Safari where available
+
+---
+
+# 58. SECURITY TESTING
+
+Test:
+
+* Unauthorized property editing
+* Unauthorized property deletion
+* Unauthorized inquiry access
+* Privilege escalation
+* CSRF
+* XSS
+* SQL injection
+* Malicious file upload
+* REST endpoint permissions
+* AJAX permissions
+* Invalid IDs
+* Tampered parameters
+
+---
+
+# 59. PERFORMANCE TESTING
+
+Test:
+
+* Homepage
+* Property archive
+* Search
+* Property detail
+* Agent page
+* Dashboard
+
+Measure/inspect:
+
+* Database queries
+* Query complexity
+* Image sizes
+* JavaScript
+* CSS
+* External requests
+* Map loading
+* REST requests
+
+---
+
+# 60. SEO TESTING
+
+Verify:
+
+* Titles
+* Meta descriptions
+* Canonicals
+* Structured data
+* Sitemap
+* Robots
+* Breadcrumbs
+* Property URLs
+* Location URLs
+* Image alt text
+* Open Graph
+
+Avoid duplicate property URLs.
+
+---
+
+# 61. ERROR HANDLING
+
+Provide friendly errors for:
+
+```text
+Property not found
+No properties found
+Invalid search
+Unauthorized request
+Inquiry submission failed
+Viewing request failed
+Image upload failed
+Login failure
+```
+
+Never expose:
+
+* PHP stack traces
+* Database errors
+* API keys
+* Internal file paths
+* Sensitive information
+
+---
+
+# 62. ADMIN UX
+
+Admin functionality should follow WordPress conventions.
+
+Do not create an entirely separate admin application.
+
+Use:
+
+* WordPress admin menus
+* Meta boxes where appropriate
+* Custom columns
+* Filters
+* Bulk actions
+* Capability checks
+
+---
+
+# 63. CODE QUALITY
+
+Follow WordPress coding standards.
+
+Code must be:
+
+* Modular
+* Reusable
+* Documented
+* Testable
+* Maintainable
+
+Avoid:
+
+* Massive PHP files
+* Huge functions
+* Duplicate logic
+* Global state
+* Hardcoded URLs
+* Hardcoded credentials
+
+---
+
+# 64. PLUGIN DEPENDENCIES
+
+Required:
+
+* WordPress
+
+Optional:
+
+* SEO plugin
+* Security plugin
+* Cache plugin
+* Backup plugin
+* Map provider
+
+Before adding a third-party plugin, determine whether the requirement can reasonably be implemented using WordPress-native APIs.
+
+Every dependency must be documented.
+
+---
+
+# 65. THEME RESPONSIBILITIES
+
+The theme should handle:
+
+* Visual design
+* Layout
+* Templates
+* Components
+* Navigation
+* Styling
+* Accessibility presentation
+
+The theme should NOT contain critical business logic.
+
+---
+
+# 66. CORE PLUGIN RESPONSIBILITIES
+
+The PrimeEstate Core plugin should handle:
+
+* Property CPT
+* Taxonomies
+* Property metadata
+* Agent functionality
+* Search
+* Filters
+* Favorites
+* Comparison
+* Inquiries
+* Viewing requests
+* REST endpoints
+* Capabilities
+* Admin functionality
+* Security-related business logic
+
+This ensures the data/functionality remains available if the theme changes.
+
+---
+
+# 67. THEME COMPONENTS
+
+Reusable components should include:
+
+```text
+PropertyCard
+PropertyGrid
+PropertyGallery
+PropertySearch
+PropertyFilter
+PropertyMeta
+AgentCard
+AgentProfile
+InquiryForm
+ViewingForm
+FavoriteButton
+CompareButton
+LocationCard
+Testimonial
+Breadcrumbs
+Pagination
+EmptyState
+LoadingState
+Modal
+```
+
+---
+
+# 68. DESIGN SYSTEM
+
+Create a centralized design system.
+
+Define:
+
+* Typography
+* Font sizes
+* Font weights
+* Spacing
+* Border radius
+* Shadows
+* Breakpoints
+* Buttons
+* Form controls
+* Cards
+* Icons
+
+Use WordPress `theme.json` where appropriate.
+
+Do not scatter arbitrary CSS values throughout the project.
+
+---
+
+# 69. ANIMATIONS
+
+Animations should be subtle.
+
+Use animations for:
+
+* Card hover
+* Image transitions
+* Search interactions
+* Modal opening
+* Navigation
+* Page transitions where appropriate
+
+Respect:
+
+```text
+prefers-reduced-motion
+```
+
+Never make animation necessary to understand content.
+
+---
+
+# 70. INTERNATIONALIZATION
+
+Prepare the theme/plugin for translation.
+
+Use WordPress internationalization functions.
+
+Avoid hardcoded user-facing strings.
+
+---
+
+# 71. DEPLOYMENT
+
+Production architecture:
+
+```text
+Domain
+   ↓
+DNS
+   ↓
+Hosting
+   ↓
+SSL
+   ↓
+WordPress
+   ↓
+PrimeEstate Theme
+   ↓
+PrimeEstate Core
+   ↓
+Production Database
+```
+
+Before production:
+
+* HTTPS enabled
+* Debug mode disabled
+* Backups configured
+* Admin accounts secured
+* Unused plugins removed
+* Demo data removed where applicable
+* Search tested
+* Forms tested
+* Email tested
+* Mobile tested
+* SEO tested
+* Security tested
+
+---
+
+# 72. DEVELOPMENT / STAGING / PRODUCTION
+
+Maintain separate environments:
+
+```text
+Development
+     ↓
+Staging
+     ↓
+Production
+```
+
+Never use production credentials in development.
+
+Never commit secrets to Git.
+
+---
+
+# 73. GIT WORKFLOW
+
+Use Git.
+
+Branches:
+
+```text
+main
+develop
+feature/*
+fix/*
+```
+
+Example commits:
+
+```text
+feat: add property custom post type
+feat: implement advanced property search
+feat: add agent dashboard
+feat: implement property favorites
+feat: add property comparison
+fix: secure inquiry endpoint
+perf: optimize property queries
+security: validate property image uploads
+```
+
+---
+
+# 74. DOCUMENTATION
+
+Create:
+
+```text
+README.md
+docs/setup.md
+docs/deployment.md
+docs/admin-guide.md
+docs/agent-guide.md
+docs/api.md
+docs/troubleshooting.md
+```
+
+Documentation must explain:
+
+* Local setup
+* WordPress setup
+* Theme activation
+* Plugin activation
+* Database setup
+* Demo data
+* Agent accounts
+* Property management
+* Deployment
+* Backup
+* Troubleshooting
+
+---
+
+# 75. PORTFOLIO CASE STUDY
+
+Create a portfolio case study for the completed project.
+
+Include:
+
+## Challenge
+
+Build a modern real estate platform capable of managing property listings, agents and inquiries.
+
+## Solution
+
+Custom WordPress architecture with:
+
+* Custom property management
+* Advanced search
+* Agent management
+* Property comparison
+* Favorites
+* Inquiry management
+* Viewing requests
+* REST API
+* Responsive UX
+
+## Technology
+
+```text
+WordPress
+PHP
+MySQL
+JavaScript
+REST API
+Custom Theme
+Custom Plugin
+Custom Post Types
+Custom Taxonomies
+SDD
+```
+
+## Screenshots
+
+Capture:
+
+1. Homepage
+2. Search interface
+3. Property archive
+4. Advanced filters
+5. Property detail
+6. Property gallery
+7. Map view
+8. Agent profile
+9. Agent dashboard
+10. Property submission
+11. Favorites
+12. Comparison
+13. Inquiry management
+14. Mobile interface
+15. WordPress admin
+
+Do not invent business results or performance percentages.
+
+Only report measurable results that were actually tested.
+
+---
+
+# 76. DEFINITION OF DONE
+
+The project is complete only when:
+
+* [ ] Custom WordPress theme implemented
+* [ ] PrimeEstate Core plugin implemented
+* [ ] Property CPT implemented
+* [ ] Property taxonomies implemented
+* [ ] Property metadata implemented
+* [ ] 50+ demo properties created
+* [ ] 8+ demo agents created
+* [ ] Advanced search implemented
+* [ ] Filtering implemented
+* [ ] Sorting implemented
+* [ ] Property map implemented or graceful fallback provided
+* [ ] Property detail page implemented
+* [ ] Agent profiles implemented
+* [ ] Agent dashboard implemented
+* [ ] Property submission implemented
+* [ ] Favorites implemented
+* [ ] Property comparison implemented
+* [ ] Inquiry system implemented
+* [ ] Viewing request system implemented
+* [ ] User dashboard implemented
+* [ ] Admin dashboard implemented
+* [ ] Blog implemented
+* [ ] SEO architecture implemented
+* [ ] Accessibility reviewed
+* [ ] Security reviewed
+* [ ] Performance reviewed
+* [ ] Responsive testing completed
+* [ ] Browser testing completed
+* [ ] Demo seed system implemented
+* [ ] Documentation completed
+* [ ] Git repository cleaned
+* [ ] Deployment documented
+
+---
+
+# 77. CLAUDE CODE EXECUTION INSTRUCTIONS
+
+Claude Code MUST follow this sequence.
+
+## Phase 1 — Analysis
+
+Read:
+
+```text
+spec.md
+```
+
+Then inspect:
+
+```text
+/specs/
+```
+
+Identify:
+
+* Requirements
+* Dependencies
+* Architecture
+* Risks
+* Unknowns
+
+Do NOT begin coding immediately.
+
+---
+
+## Phase 2 — Architecture
+
+Create/update:
+
+```text
+constitution.md
+architecture.md
+property-model.md
+agent-model.md
+user-model.md
+```
+
+Document:
+
+* Data relationships
+* WordPress architecture
+* Theme/plugin responsibilities
+* Permissions
+* API architecture
+
+---
+
+## Phase 3 — Foundation
+
+Implement:
+
+1. Theme foundation
+2. Plugin foundation
+3. Property CPT
+4. Taxonomies
+5. Property metadata
+6. Capabilities
+7. Design system
+
+---
+
+## Phase 4 — Core Features
+
+Implement:
+
+1. Property archive
+2. Property detail
+3. Search
+4. Filters
+5. Sorting
+6. Agent profiles
+7. Inquiry system
+8. Viewing requests
+9. Favorites
+10. Comparison
+
+---
+
+## Phase 5 — Advanced Features
+
+Implement:
+
+1. Map
+2. Agent dashboard
+3. Property submission
+4. User dashboard
+5. REST API
+6. Recommendation system
+
+---
+
+## Phase 6 — Content
+
+Implement:
+
+* Homepage
+* About
+* Locations
+* Blog
+* Contact
+* FAQ
+
+---
+
+## Phase 7 — Testing
+
+Run:
+
+* Functional tests
+* Security tests
+* Accessibility tests
+* Responsive tests
+* Performance tests
+* SEO tests
+
+Fix issues before declaring completion.
+
+---
+
+## Phase 8 — Final Review
+
+Claude Code MUST produce a final report containing:
+
+```text
+Implemented Features
+Architecture
+Dependencies
+Security Review
+Performance Review
+Accessibility Review
+SEO Review
+Testing Results
+Known Limitations
+Deployment Instructions
+```
+
+If anything remains incomplete, explicitly state it.
+
+Do not claim completion when a required feature is missing.
+
+---
+
+# 78. FINAL PRODUCT STANDARD
+
+The final website must feel like a **real SaaS-style real estate platform built on WordPress**, not a WordPress template.
+
+The finished product should demonstrate:
+
+```text
+             PrimeEstate
+                  │
+      ┌───────────┼───────────┐
+      │           │           │
+   Listings     Agents      Users
+      │           │           │
+      └───────────┼───────────┘
+                  │
+        ┌─────────┴─────────┐
+        │                   │
+     Search             Inquiries
+        │                   │
+     Filters            Viewings
+        │                   │
+        └─────────┬─────────┘
+                  │
+          WordPress Core
+                  │
+        PrimeEstate Plugin
+                  │
+         PrimeEstate Theme
+```
+
+The project should clearly communicate to potential clients that Z&T Technologies can build:
+
+**Custom WordPress applications — not just WordPress websites.**

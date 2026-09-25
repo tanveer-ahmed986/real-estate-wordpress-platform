@@ -1,0 +1,72 @@
+# AI Automation Pipeline Configuration Template
+# Replace {{PLACEHOLDERS}} with your values
+
+pipeline:
+  name: "{{PIPELINE_NAME}}"
+  description: "{{PIPELINE_DESCRIPTION}}"
+  version: "1.0.0"
+  trigger: "{{TRIGGER_TYPE}}"  # api, schedule, event, manual
+
+# Pipeline Steps
+steps:
+  - name: "validate_input"
+    type: "validation"
+    config:
+      schema: "{{INPUT_SCHEMA_PATH}}"
+      on_failure: "reject"
+
+  - name: "preprocess"
+    type: "transform"
+    config:
+      operations:
+        - type: "{{OPERATION_TYPE}}"
+          params: {}
+
+  - name: "ai_process"
+    type: "llm_call"
+    config:
+      model: "{{MODEL_NAME}}"
+      prompt_template: "{{PROMPT_TEMPLATE_PATH}}"
+      output_schema: "{{OUTPUT_SCHEMA_PATH}}"
+      temperature: 0.0
+      max_tokens: 2048
+
+  - name: "validate_output"
+    type: "validation"
+    config:
+      schema: "{{OUTPUT_SCHEMA_PATH}}"
+      on_failure: "retry"
+      max_retries: 3
+
+  - name: "deliver"
+    type: "output"
+    config:
+      destination: "{{DESTINATION}}"  # api, database, file, queue
+      format: "{{OUTPUT_FORMAT}}"
+
+# Error Handling
+error_handling:
+  default_strategy: "retry_then_dlq"
+  max_retries: 3
+  retry_delay_seconds: 5
+  dead_letter_queue: "{{DLQ_NAME}}"
+  alert_on_failure: true
+
+# Monitoring
+monitoring:
+  metrics:
+    - "latency_p99"
+    - "error_rate"
+    - "throughput"
+    - "cost_per_run"
+  alerts:
+    error_rate_threshold: 0.05
+    latency_p99_threshold_ms: 10000
+    cost_per_run_threshold_usd: 1.00
+
+# Scaling
+scaling:
+  min_workers: 1
+  max_workers: 10
+  concurrency_limit: 5
+  queue_size: 1000

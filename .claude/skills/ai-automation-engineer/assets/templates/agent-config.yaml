@@ -1,0 +1,70 @@
+# AI Agent Configuration Template
+# Replace {{PLACEHOLDERS}} with your values
+
+agent:
+  name: "{{AGENT_NAME}}"
+  description: "{{AGENT_DESCRIPTION}}"
+  version: "1.0.0"
+
+# LLM Configuration
+llm:
+  provider: "{{PROVIDER}}"  # anthropic, openai, azure
+  model: "{{MODEL_NAME}}"   # claude-sonnet-4-5-20250929, gpt-4o, etc.
+  temperature: 0.0
+  max_tokens: 4096
+  timeout_seconds: 30
+
+# Agent Behavior
+behavior:
+  max_iterations: 10
+  max_tool_retries: 2
+  thinking_enabled: false
+  thinking_budget_tokens: 10000
+
+# Tools
+tools:
+  - name: "{{TOOL_1_NAME}}"
+    description: "{{TOOL_1_DESCRIPTION}}"
+    timeout_seconds: 15
+    retries: 2
+  # Add more tools as needed
+
+# Safety & Guardrails
+safety:
+  input_sanitization: true
+  output_validation: true
+  pii_redaction: true
+  max_output_tokens: 4096
+  blocked_patterns:
+    - "ignore previous instructions"
+    - "system prompt"
+
+# Rate Limiting
+rate_limits:
+  requests_per_minute: 30
+  tokens_per_minute: 100000
+  cost_per_request_limit_usd: 0.50
+  daily_budget_usd: 50.00
+
+# Observability
+observability:
+  tracing_enabled: true
+  log_level: "INFO"
+  metrics_enabled: true
+  log_prompts: false  # Set true only in dev (PII risk)
+  log_responses: false
+
+# Error Handling
+error_handling:
+  retry_strategy: "exponential_backoff"
+  base_delay_seconds: 1.0
+  max_delay_seconds: 60.0
+  fallback_model: "{{FALLBACK_MODEL}}"
+  dead_letter_queue: true
+
+# Caching
+cache:
+  enabled: true
+  ttl_hours: 24
+  strategy: "exact"  # exact, semantic
+  backend: "redis"   # redis, memory, sqlite

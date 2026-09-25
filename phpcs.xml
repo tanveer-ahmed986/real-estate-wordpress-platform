@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<ruleset name="PrimeEstate">
+    <description>WordPress Coding Standards for the PrimeEstate theme and plugin (constitution Principle IX).</description>
+
+    <file>wp-content/themes/primeestate</file>
+    <file>wp-content/plugins/primeestate-core</file>
+
+    <exclude-pattern>*/node_modules/*</exclude-pattern>
+    <exclude-pattern>*/vendor/*</exclude-pattern>
+    <exclude-pattern>*/assets/*</exclude-pattern>
+
+    <arg name="extensions" value="php"/>
+    <arg value="sp"/>
+
+    <rule ref="WordPress">
+        <exclude name="WordPress.Files.FileName"/>
+    </rule>
+
+    <rule ref="WordPress.WP.I18n">
+        <properties>
+            <property name="text_domain" type="array">
+                <element value="primeestate"/>
+            </property>
+        </properties>
+    </rule>
+
+    <config name="testVersion" value="8.1-"/>
+    <rule ref="PHPCompatibilityWP"/>
+</ruleset>

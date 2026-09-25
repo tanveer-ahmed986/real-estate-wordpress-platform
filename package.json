@@ -1,0 +1,12 @@
+{
+  "name": "primeestate-e2e",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Playwright E2E suite for the PrimeEstate platform. No frontend build step — theme/plugin JS ships framework-free.",
+  "scripts": {
+    "test:e2e": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.47.0"
+  }
+}

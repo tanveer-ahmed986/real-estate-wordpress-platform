@@ -1,0 +1,178 @@
+{
+  "integrations": {
+    "crm": {
+      "provider": "salesforce|hubspot|pipedrive|custom",
+      "config": {
+        "api_url": "{{CRM_API_URL}}",
+        "auth_type": "oauth|api_key|basic",
+        "credentials": {
+          "client_id": "{{STORED_IN_ENV}}",
+          "client_secret": "{{STORED_IN_ENV}}",
+          "api_key": "{{STORED_IN_ENV}}"
+        }
+      },
+      "operations": {
+        "create_lead": {
+          "enabled": true,
+          "endpoint": "/leads",
+          "method": "POST",
+          "field_mapping": {
+            "firstName": "{{user.first_name}}",
+            "lastName": "{{user.last_name}}",
+            "email": "{{user.email}}",
+            "phone": "{{user.phone}}",
+            "source": "Chatbot",
+            "status": "New"
+          }
+        },
+        "update_contact": {
+          "enabled": true,
+          "endpoint": "/contacts/{{contact_id}}",
+          "method": "PATCH"
+        },
+        "search_contact": {
+          "enabled": true,
+          "endpoint": "/contacts/search",
+          "method": "GET"
+        }
+      },
+      "retry_policy": {
+        "max_retries": 3,
+        "backoff_ms": 1000,
+        "exponential_backoff": true
+      },
+      "rate_limit": {
+        "requests_per_minute": 100
+      }
+    },
+    "booking": {
+      "provider": "calendly|cal.com|custom",
+      "config": {
+        "api_url": "{{BOOKING_API_URL}}",
+        "api_key": "{{STORED_IN_ENV}}"
+      },
+      "operations": {
+        "get_availability": {
+          "enabled": true,
+          "endpoint": "/availability",
+          "cache_ttl_seconds": 300
+        },
+        "create_booking": {
+          "enabled": true,
+          "endpoint": "/bookings",
+          "method": "POST",
+          "field_mapping": {
+            "event_type_id": "{{EVENT_TYPE_ID}}",
+            "start_time": "{{booking.start_time}}",
+            "timezone": "{{user.timezone}}",
+            "attendee": {
+              "name": "{{user.name}}",
+              "email": "{{user.email}}",
+              "phone": "{{user.phone}}"
+            }
+          }
+        },
+        "cancel_booking": {
+          "enabled": true,
+          "endpoint": "/bookings/{{booking_id}}",
+          "method": "DELETE"
+        }
+      },
+      "retry_policy": {
+        "max_retries": 3,
+        "backoff_ms": 1000
+      }
+    },
+    "ticketing": {
+      "provider": "zendesk|freshdesk|custom",
+      "config": {
+        "subdomain": "{{TICKETING_SUBDOMAIN}}",
+        "api_url": "https://{{TICKETING_SUBDOMAIN}}.zendesk.com/api/v2",
+        "auth_type": "basic",
+        "credentials": {
+          "email": "{{STORED_IN_ENV}}",
+          "api_token": "{{STORED_IN_ENV}}"
+        }
+      },
+      "operations": {
+        "create_ticket": {
+          "enabled": true,
+          "endpoint": "/tickets",
+          "method": "POST",
+          "field_mapping": {
+            "subject": "{{ticket.subject}}",
+            "description": "{{ticket.description}}",
+            "requester": {
+              "name": "{{user.name}}",
+              "email": "{{user.email}}"
+            },
+            "priority": "{{ticket.priority}}",
+            "tags": ["chatbot", "{{conversation.channel}}"]
+          }
+        },
+        "add_comment": {
+          "enabled": true,
+          "endpoint": "/tickets/{{ticket_id}}",
+          "method": "PUT"
+        },
+        "get_ticket": {
+          "enabled": true,
+          "endpoint": "/tickets/{{ticket_id}}",
+          "method": "GET"
+        }
+      },
+      "retry_policy": {
+        "max_retries": 3,
+        "backoff_ms": 1000
+      }
+    },
+    "communication": {
+      "email": {
+        "provider": "sendgrid|mailgun|ses",
+        "config": {
+          "api_key": "{{STORED_IN_ENV}}",
+          "from_email": "{{FROM_EMAIL}}",
+          "from_name": "{{FROM_NAME}}"
+        }
+      },
+      "sms": {
+        "provider": "twilio|messagebird",
+        "config": {
+          "account_sid": "{{STORED_IN_ENV}}",
+          "auth_token": "{{STORED_IN_ENV}}",
+          "from_number": "{{FROM_NUMBER}}"
+        }
+      },
+      "whatsapp": {
+        "provider": "twilio|meta",
+        "config": {
+          "phone_number_id": "{{STORED_IN_ENV}}",
+          "access_token": "{{STORED_IN_ENV}}"
+        }
+      }
+    }
+  },
+  "webhooks": {
+    "incoming": {
+      "signature_header": "x-signature",
+      "signature_secret": "{{STORED_IN_ENV}}",
+      "verify_signature": true
+    },
+    "outgoing": {
+      "events": [
+        "conversation_started",
+        "conversation_completed",
+        "lead_created",
+        "booking_created",
+        "ticket_created"
+      ],
+      "url": "{{WEBHOOK_URL}}",
+      "secret": "{{STORED_IN_ENV}}"
+    }
+  },
+  "fallback_handlers": {
+    "crm_failure": "continue_without_crm",
+    "booking_failure": "offer_manual_booking",
+    "ticketing_failure": "escalate_to_email"
+  }
+}
