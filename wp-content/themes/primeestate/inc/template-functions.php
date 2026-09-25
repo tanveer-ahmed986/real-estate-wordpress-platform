@@ -63,6 +63,29 @@ function primeestate_format_price( float $price, string $price_type, string $cur
 }
 
 /**
+ * A short, currency-symbol-free K/M abbreviation for tight spaces (map
+ * pins) — `primeestate_format_price()`'s full "USD 2,476,500" doesn't fit
+ * on a pin badge. Deliberately drops the currency code: a map showing one
+ * city's results is already in one currency, so repeating it on every pin
+ * is noise, not information.
+ */
+function primeestate_format_price_short( float $price, string $price_type ): string {
+	if ( 'on_request' === $price_type || $price <= 0 ) {
+		return __( 'Inquire', 'primeestate' );
+	}
+
+	if ( $price >= 1000000 ) {
+		$short = round( $price / 1000000, $price >= 10000000 ? 0 : 1 ) . 'M';
+	} elseif ( $price >= 1000 ) {
+		$short = round( $price / 1000, $price >= 10000 ? 0 : 1 ) . 'K';
+	} else {
+		$short = number_format_i18n( $price );
+	}
+
+	return 'starting_from' === $price_type ? $short . '+' : $short;
+}
+
+/**
  * Renders an inline SVG icon from theme/assets/icons/{name}.svg, or nothing
  * if the icon file doesn't exist yet — keeps templates from fataling while
  * the icon set is still being built out.

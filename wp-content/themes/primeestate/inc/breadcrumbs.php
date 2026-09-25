@@ -12,6 +12,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * `primeestate_render_breadcrumbs()` has existed since Phase 2 and was
+ * finished (full location-ancestor walking, BreadcrumbList JSON-LD) in
+ * Phase 12 — but nothing ever actually called it from a template. This
+ * shortcode wrapper is what templates now embed; see each
+ * `templates/*.html` file for where it's used.
+ */
+function primeestate_breadcrumbs_shortcode(): string {
+	ob_start();
+	primeestate_render_breadcrumbs();
+	return (string) ob_get_clean();
+}
+add_shortcode( 'primeestate_breadcrumbs', 'primeestate_breadcrumbs_shortcode' );
+
 function primeestate_render_breadcrumbs(): void {
 	$trail = array(
 		array(

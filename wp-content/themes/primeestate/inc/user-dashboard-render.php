@@ -39,6 +39,11 @@ function primeestate_user_dashboard_shortcode(): string {
 			<?php echo primeestate_compare_page_shortcode(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- shortcode output is already escaped internally. ?>
 		</section>
 
+		<section class="pe-user-dashboard__section" id="pe-dashboard-saved-searches">
+			<h2><?php esc_html_e( 'My Saved Searches', 'primeestate' ); ?></h2>
+			<?php primeestate_render_saved_searches_table( primeestate_get_user_saved_searches( $user->ID ) ); ?>
+		</section>
+
 		<section class="pe-user-dashboard__section" id="pe-dashboard-inquiries">
 			<h2><?php esc_html_e( 'My Inquiries', 'primeestate' ); ?></h2>
 			<?php primeestate_render_user_inquiries_table( primeestate_get_own_inquiries( $user->user_email ) ); ?>
@@ -122,6 +127,45 @@ function primeestate_render_user_viewings_table( array $viewings ): void {
 					<td><a href="<?php echo esc_url( get_permalink( $schema['property_id'] ) ); ?>"><?php echo esc_html( get_the_title( $schema['property_id'] ) ); ?></a></td>
 					<td><?php echo esc_html( $schema['preferred_date'] . ' ' . $schema['preferred_time'] ); ?></td>
 					<td><?php echo esc_html( $schema['status'] ); ?></td>
+				</tr>
+			<?php endforeach; ?>
+		</tbody>
+	</table>
+	<?php
+}
+
+/**
+ * Delete is client-side (user-dashboard.js DELETE /saved-searches/{id},
+ * then removes the row) — a full page reload for a one-row removal would be
+ * jarring next to Favorites/Compare, which already update in place.
+ *
+ * @param array<int, array{id: string, label: string, query_string: string, created_at: string, last_notified_at: ?string, seen_ids: int[]}> $searches
+ */
+function primeestate_render_saved_searches_table( array $searches ): void {
+	if ( empty( $searches ) ) {
+		echo '<p>' . esc_html__( "You haven't saved any searches yet. Apply filters on the Properties page and use \"Save this search\" to get email alerts for new matches.", 'primeestate' ) . '</p>';
+		return;
+	}
+	?>
+	<table class="pe-dashboard-table" id="pe-saved-searches-table">
+		<thead>
+			<tr>
+				<th scope="col"><?php esc_html_e( 'Search', 'primeestate' ); ?></th>
+				<th scope="col"><?php esc_html_e( 'Matches', 'primeestate' ); ?></th>
+				<th scope="col"><?php esc_html_e( 'Saved', 'primeestate' ); ?></th>
+				<th scope="col"><?php esc_html_e( 'Last alert', 'primeestate' ); ?></th>
+				<th scope="col"></th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php foreach ( $searches as $search ) : ?>
+				<?php $schema = primeestate_saved_search_to_schema( $search ); ?>
+				<tr data-saved-search-id="<?php echo esc_attr( $schema['id'] ); ?>">
+					<td><a href="<?php echo esc_url( $schema['url'] ); ?>"><?php echo esc_html( $schema['label'] ); ?></a></td>
+					<td><?php echo esc_html( $schema['result_count'] ); ?></td>
+					<td><?php echo esc_html( mysql2date( get_option( 'date_format' ), $schema['created_at'] ) ); ?></td>
+					<td><?php echo esc_html( $schema['last_notified_at'] ? mysql2date( get_option( 'date_format' ), $schema['last_notified_at'] ) : __( 'Not yet', 'primeestate' ) ); ?></td>
+					<td><button type="button" class="pe-dashboard-table__delete" data-component="delete-saved-search" data-saved-search-id="<?php echo esc_attr( $schema['id'] ); ?>"><?php esc_html_e( 'Remove', 'primeestate' ); ?></button></td>
 				</tr>
 			<?php endforeach; ?>
 		</tbody>

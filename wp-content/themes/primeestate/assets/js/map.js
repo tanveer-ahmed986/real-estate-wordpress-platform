@@ -42,7 +42,22 @@
 			var popupHtml =
 				'<a href="' + marker.permalink + '">' + marker.title + '</a><br>' + marker.price;
 
-			window.L.marker( latLng ).addTo( map ).bindPopup( popupHtml );
+			// A plain pin hides the price behind a click — every competitor
+			// reviewed puts the price directly on the pin so a result set can
+			// be scanned without clicking each one individually.
+			// `iconAnchor: [0, 0]` plus the CSS `translate(-50%, -100%)` on the
+			// label itself (see style.css) is the standard Leaflet technique
+			// for a variable-width divIcon: Leaflet can only anchor at a fixed
+			// pixel offset, but the pill's width changes with the price text,
+			// so the actual centering has to happen in CSS instead.
+			var icon = window.L.divIcon( {
+				className: 'pe-map-pin',
+				html: '<span class="pe-map-pin__label">' + marker.pinLabel + '</span>',
+				iconSize: null,
+				iconAnchor: [ 0, 0 ],
+			} );
+
+			window.L.marker( latLng, { icon: icon } ).addTo( map ).bindPopup( popupHtml );
 		} );
 
 		if ( bounds.length > 1 ) {

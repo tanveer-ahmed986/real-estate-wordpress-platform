@@ -54,7 +54,58 @@
 					return input.value;
 				} ),
 			images: uploadedImageIds( form ),
+			floor_plan: parseInt( form.querySelector( '#pe-property-floor-plan-id' ).value, 10 ) || 0,
 		};
+	}
+
+	/**
+	 * Single-file variant of initImageUpload below — one `POST /uploads`
+	 * call, the returned attachment ID replaces (not appends to) the hidden
+	 * `floor_plan` field, since a listing has at most one floor plan.
+	 */
+	function initFloorPlanUpload( form ) {
+		var input = form.querySelector( '#pe-property-floor-plan' );
+		var hidden = form.querySelector( '#pe-property-floor-plan-id' );
+		var status = form.querySelector( '.pe-property-form__floor-plan-status' );
+
+		if ( ! input ) {
+			return;
+		}
+
+		input.addEventListener( 'change', function () {
+			var file = input.files[ 0 ];
+
+			if ( ! file ) {
+				return;
+			}
+
+			var formData = new FormData();
+			formData.append( 'file', file );
+
+			status.textContent = 'Uploading ' + file.name + '…';
+
+			fetch( config.restUrl + 'uploads', {
+				method: 'POST',
+				headers: { 'X-WP-Nonce': config.nonce },
+				body: formData,
+			} )
+				.then( function ( response ) {
+					return response.json().then( function ( body ) {
+						return { ok: response.ok, body: body };
+					} );
+				} )
+				.then( function ( result ) {
+					if ( result.ok ) {
+						hidden.value = result.body.attachment_id;
+						status.textContent = file.name + ' uploaded.';
+					} else {
+						status.textContent = file.name + ': ' + ( ( result.body && result.body.message ) || 'upload failed' );
+					}
+				} )
+				.catch( function () {
+					status.textContent = file.name + ': network error.';
+				} );
+		} );
 	}
 
 	/**
@@ -125,6 +176,7 @@
 				_pe_bedrooms: parseInt( form.querySelector( '#pe-property-bedrooms' ).value, 10 ) || 0,
 				_pe_bathrooms: parseInt( form.querySelector( '#pe-property-bathrooms' ).value, 10 ) || 0,
 				_pe_area: parseFloat( form.querySelector( '#pe-property-area' ).value ) || 0,
+				_pe_floor_plan: parseInt( form.querySelector( '#pe-property-floor-plan-id' ).value, 10 ) || 0,
 			},
 		};
 	}
@@ -190,4 +242,5 @@
 	} );
 
 	Array.prototype.forEach.call( document.querySelectorAll( '[data-component="property-form"]' ), initImageUpload );
+	Array.prototype.forEach.call( document.querySelectorAll( '[data-component="property-form"]' ), initFloorPlanUpload );
 } )();

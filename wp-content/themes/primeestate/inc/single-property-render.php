@@ -45,6 +45,10 @@ function primeestate_property_detail_shortcode(): string {
 			<?php primeestate_render_property_amenities( $post ); ?>
 
 			<?php primeestate_render_map( array( $post ) ); ?>
+
+			<?php if ( ! $is_unavailable ) : ?>
+				<?php primeestate_render_mortgage_calculator( $post ); ?>
+			<?php endif; ?>
 		</div>
 
 		<aside class="pe-property-detail__sidebar">

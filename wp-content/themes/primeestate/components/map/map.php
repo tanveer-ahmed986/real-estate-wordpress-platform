@@ -29,16 +29,20 @@ function primeestate_render_map( array $posts ): void {
 			continue; // Property omitted from the map, not an error (data-model.md §1).
 		}
 
+		$price_type = (string) get_post_meta( $post->ID, '_pe_price_type', true );
+		$price      = (float) get_post_meta( $post->ID, '_pe_price', true );
+
 		$markers[] = array(
 			'lat'       => (float) $lat,
 			'lng'       => (float) $lng,
 			'title'     => get_the_title( $post ),
 			'permalink' => get_permalink( $post ),
-			'price'     => primeestate_format_price(
-				(float) get_post_meta( $post->ID, '_pe_price', true ),
-				(string) get_post_meta( $post->ID, '_pe_price_type', true ),
-				(string) get_post_meta( $post->ID, '_pe_currency', true )
-			),
+			'price'     => primeestate_format_price( $price, $price_type, (string) get_post_meta( $post->ID, '_pe_currency', true ) ),
+			// A short label for the map pin itself (competitive review: Zillow
+			// puts the price directly on the pin, not behind a click) — the
+			// full currency-formatted string is too wide for a pin badge, so
+			// this is a separate, deliberately terse K/M abbreviation.
+			'pinLabel'  => primeestate_format_price_short( $price, $price_type ),
 		);
 	}
 

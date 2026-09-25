@@ -3,11 +3,43 @@
  * `PATCH /wp/v2/users/me`, not a custom `primeestate/v1` route (see the code
  * comment on `primeestate_render_account_settings_form()`), so this uses
  * `config.coreRestUrl` rather than `config.restUrl`.
+ *
+ * Also owns the Saved Searches "Remove" button (DELETE /saved-searches/{id})
+ * — the only interactive control on that dashboard section, since the rest
+ * of it is plain server-rendered links.
  */
 ( function () {
 	'use strict';
 
-	var config = window.primeEstateFavorites || { coreRestUrl: '', nonce: '' };
+	var config = window.primeEstateFavorites || { restUrl: '', coreRestUrl: '', nonce: '' };
+
+	document.addEventListener( 'click', function ( event ) {
+		var button = event.target.closest ? event.target.closest( '[data-component="delete-saved-search"]' ) : null;
+
+		if ( ! button ) {
+			return;
+		}
+
+		var id = button.getAttribute( 'data-saved-search-id' );
+		var row = button.closest( 'tr' );
+
+		button.disabled = true;
+
+		fetch( config.restUrl + 'saved-searches/' + id, {
+			method: 'DELETE',
+			headers: { 'X-WP-Nonce': config.nonce },
+		} )
+			.then( function ( response ) {
+				if ( response.ok && row ) {
+					row.remove();
+				} else {
+					button.disabled = false;
+				}
+			} )
+			.catch( function () {
+				button.disabled = false;
+			} );
+	} );
 
 	document.addEventListener( 'submit', function ( event ) {
 		var form = event.target.closest ? event.target.closest( '[data-component="account-settings-form"]' ) : null;

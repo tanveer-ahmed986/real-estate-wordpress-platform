@@ -112,8 +112,40 @@ function primeestate_register_property_meta(): void {
 			'sanitize_callback' => 'primeestate_sanitize_gallery_meta',
 		)
 	);
+
+	/**
+	 * Unified Gallery (competitive review: Zameen/Graana both show a floor
+	 * plan as a dedicated slide alongside photos, not buried in the
+	 * description) — a single attachment ID, unlike `_pe_gallery`'s array,
+	 * since a listing has at most one floor plan image.
+	 */
+	register_post_meta(
+		'property',
+		'_pe_floor_plan',
+		array(
+			'type'              => 'integer',
+			'single'            => true,
+			'show_in_rest'      => true,
+			'sanitize_callback' => 'primeestate_sanitize_floor_plan_meta',
+		)
+	);
 }
 add_action( 'init', 'primeestate_register_property_meta' );
+
+/**
+ * Mirrors `primeestate_sanitize_gallery_meta()`'s existence/image check but
+ * for a single ID — `0` (WordPress's own "unset" convention for an integer
+ * meta field) if the value doesn't resolve to a real image attachment.
+ */
+function primeestate_sanitize_floor_plan_meta( $value ): int {
+	$attachment_id = absint( $value );
+
+	if ( $attachment_id > 0 && 'attachment' === get_post_type( $attachment_id ) && wp_attachment_is_image( $attachment_id ) ) {
+		return $attachment_id;
+	}
+
+	return 0;
+}
 
 /**
  * Gallery meta must be an array of attachment IDs that actually exist and

@@ -161,6 +161,13 @@ function primeestate_render_property_form( ?WP_Post $existing, string $redirect_
 			<input type="hidden" id="pe-property-image-ids" name="image_ids" value="">
 		</div>
 
+		<div class="pe-property-form__field">
+			<label for="pe-property-floor-plan"><?php esc_html_e( 'Floor plan (optional)', 'primeestate' ); ?></label>
+			<input type="file" id="pe-property-floor-plan" accept="image/jpeg,image/png,image/webp">
+			<p class="pe-property-form__floor-plan-status" aria-live="polite"></p>
+			<input type="hidden" id="pe-property-floor-plan-id" name="floor_plan" value="<?php echo esc_attr( $is_edit ? get_post_meta( $existing->ID, '_pe_floor_plan', true ) : '' ); ?>">
+		</div>
+
 		<button type="submit" class="pe-property-form__submit">
 			<?php echo esc_html( $is_edit ? __( 'Save changes', 'primeestate' ) : __( 'Add property', 'primeestate' ) ); ?>
 		</button>

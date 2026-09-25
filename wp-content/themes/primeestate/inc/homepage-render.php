@@ -87,13 +87,17 @@ add_shortcode( 'primeestate_latest_listings', 'primeestate_latest_listings_short
  * least one published listing, so it never links to an empty archive.
  */
 function primeestate_browse_by_type_shortcode(): string {
+	// No `number` cap — competitive review flagged that capping this at 6
+	// silently hid 4 of the 10 seeded property types (Penthouse, Office,
+	// Shop, House) from the homepage entirely, since they happened to have
+	// fewer listings than the top 6. Every type with at least one published
+	// listing gets a tile; `hide_empty` already excludes the rest.
 	$terms = get_terms(
 		array(
 			'taxonomy'   => 'property_type',
 			'hide_empty' => true,
 			'orderby'    => 'count',
 			'order'      => 'DESC',
-			'number'     => 6,
 		)
 	);
 

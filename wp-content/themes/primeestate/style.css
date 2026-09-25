@@ -564,6 +564,53 @@ fieldset[class$="__field"] input[type="radio"] {
 	text-align: center;
 }
 
+/* ---------- Save search ---------- */
+
+.pe-save-search {
+	margin-top: 1.5rem;
+	padding-top: 1.25rem;
+	border-top: 1px solid var(--wp--preset--color--border, #E2E2DE);
+}
+
+.pe-save-search__label {
+	width: 100%;
+	margin-bottom: 0.5rem;
+}
+
+.pe-save-search__button {
+	width: 100%;
+	background: transparent;
+	color: var(--wp--preset--color--gold, #B08D57);
+	border: 1px solid var(--wp--preset--color--gold, #B08D57);
+}
+
+.pe-save-search__button:hover {
+	background: var(--wp--preset--color--gold, #B08D57);
+	color: var(--wp--preset--color--surface, #FFFFFF);
+}
+
+.pe-save-search__status {
+	font-size: var(--wp--preset--font-size--xs);
+	margin-bottom: 0;
+	margin-top: 0.5rem;
+}
+
+.pe-save-search__status--success {
+	color: var(--wp--preset--color--ink, #0F172A);
+}
+
+.pe-save-search__status--error {
+	color: #B3261E;
+}
+
+.pe-save-search__guest {
+	margin-top: 1.5rem;
+	padding-top: 1.25rem;
+	border-top: 1px solid var(--wp--preset--color--border, #E2E2DE);
+	font-size: var(--wp--preset--font-size--sm);
+	color: var(--wp--preset--color--ink-soft, #475569);
+}
+
 .pe-archive__count {
 	color: var(--wp--preset--color--ink-soft, #475569);
 	font-size: var(--wp--preset--font-size--sm);
@@ -656,6 +703,29 @@ fieldset[class$="__field"] input[type="radio"] {
 	letter-spacing: 0.04em;
 	padding: 0.3rem 0.65rem;
 	border-radius: var(--pe-radius);
+}
+
+/* Freshness signal (competitive review: Zameen/Zillow both surface "New" /
+   "Added X ago" on every card) — right corner so it never collides with
+   the market-status badge on the left. */
+.pe-property-card__new {
+	position: absolute;
+	top: 0.75rem;
+	right: 0.75rem;
+	background: var(--wp--preset--color--gold, #B08D57);
+	color: #fff;
+	font-size: var(--wp--preset--font-size--xs);
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	padding: 0.3rem 0.65rem;
+	border-radius: var(--pe-radius);
+}
+
+.pe-property-card__added {
+	font-size: var(--wp--preset--font-size--xs);
+	color: var(--wp--preset--color--ink-soft, #475569);
+	margin: -0.5rem 0 1rem;
 }
 
 .pe-property-card__body {
@@ -1143,6 +1213,104 @@ fieldset[class$="__field"] input[type="radio"] {
 	margin-block: var(--wp--preset--spacing--md);
 }
 
+/* ---------- Mortgage calculator ---------- */
+
+.pe-mortgage-calc {
+	margin-block: var(--wp--preset--spacing--md);
+	padding: 1.5rem;
+	border: 1px solid var(--wp--preset--color--border, #E2E2DE);
+	border-radius: var(--pe-radius);
+}
+
+.pe-mortgage-calc h2 {
+	font-size: var(--wp--preset--font-size--lg);
+	margin: 0 0 0.25rem;
+}
+
+.pe-mortgage-calc__note {
+	color: var(--wp--preset--color--ink-soft, #475569);
+	font-size: var(--wp--preset--font-size--xs);
+	margin: 0 0 1.25rem;
+}
+
+.pe-mortgage-calc__inputs {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+	gap: 1rem;
+	margin-bottom: 1.25rem;
+}
+
+.pe-mortgage-calc__field { margin-bottom: 0; }
+
+.pe-mortgage-calc__result {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	padding-top: 1.1rem;
+	border-top: 1px solid var(--wp--preset--color--border, #E2E2DE);
+}
+
+.pe-mortgage-calc__result-label {
+	font-size: var(--wp--preset--font-size--sm);
+	color: var(--wp--preset--color--ink-soft, #475569);
+}
+
+.pe-mortgage-calc__result-value {
+	font-family: var(--wp--preset--font-family--display);
+	font-size: var(--wp--preset--font-size--xl);
+	color: var(--wp--preset--color--gold, #B08D57);
+}
+
+/* Price-on-the-pin map markers (competitive review: a plain pin hides the
+   price behind a click). `.pe-map-pin` is Leaflet's own wrapper div — reset
+   its default icon box so only the pill inside is visible; the pill itself
+   is what's actually centered on the coordinate, via the transform below,
+   since a divIcon can't be anchor-centered when its width varies with the
+   price text (see map.js). */
+.pe-map-pin {
+	background: none;
+	border: none;
+}
+
+.pe-map-pin__label {
+	position: absolute;
+	transform: translate(-50%, -100%);
+	display: inline-block;
+	white-space: nowrap;
+	background: var(--wp--preset--color--ink, #0F172A);
+	color: #fff;
+	font-family: var(--wp--preset--font-family--sans);
+	font-size: var(--wp--preset--font-size--xs);
+	font-weight: 700;
+	padding: 0.3rem 0.6rem;
+	border-radius: 20px;
+	box-shadow: var(--pe-shadow-md);
+	cursor: pointer;
+	transition: background var(--pe-transition), transform var(--pe-transition);
+}
+
+.pe-map-pin__label::after {
+	content: "";
+	position: absolute;
+	left: 50%;
+	bottom: -5px;
+	transform: translateX(-50%);
+	border: 5px solid transparent;
+	border-top-color: var(--wp--preset--color--ink, #0F172A);
+	border-bottom: 0;
+}
+
+.pe-map-pin__label:hover {
+	background: var(--wp--preset--color--gold, #B08D57);
+	transform: translate(-50%, -100%) scale(1.06);
+}
+
+.pe-map-pin__label:hover::after {
+	border-top-color: var(--wp--preset--color--gold, #B08D57);
+}
+
 /* ---------- Property gallery ---------- */
 
 .pe-property-gallery__main {
@@ -1159,10 +1327,27 @@ fieldset[class$="__field"] input[type="radio"] {
 	display: block;
 }
 
+/**
+ * An author-origin `display` rule on `.pe-property-gallery__slide` beats the
+ * user-agent stylesheet's `[hidden] { display: none }` regardless of
+ * specificity (author normal-importance always outranks UA normal-importance
+ * in the cascade) — without this override, every slide the PHP marks
+ * `hidden` for index > 0 stayed visually stacked on top of slide 0 the whole
+ * time, invisible only when a property happened to have just one photo.
+ */
+.pe-property-gallery__slide[hidden] {
+	display: none;
+}
+
 .pe-property-gallery__slide img {
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
+}
+
+.pe-property-gallery__slide--floor-plan img {
+	object-fit: contain;
+	background: #fff;
 }
 
 .pe-property-gallery--fullscreen .pe-property-gallery__main {
@@ -1188,6 +1373,7 @@ fieldset[class$="__field"] input[type="radio"] {
 }
 
 .pe-property-gallery__thumb {
+	position: relative;
 	flex-shrink: 0;
 	width: 72px;
 	height: 54px;
@@ -1206,10 +1392,60 @@ fieldset[class$="__field"] input[type="radio"] {
 	object-fit: cover;
 }
 
+.pe-property-gallery__thumb--floor-plan img {
+	object-fit: contain;
+	background: #fff;
+}
+
 .pe-property-gallery__thumb[aria-pressed="true"],
 .pe-property-gallery__thumb:hover {
 	opacity: 1;
 	border-color: var(--wp--preset--color--gold, #B08D57);
+}
+
+.pe-property-gallery__badge {
+	position: absolute;
+	top: 1rem;
+	left: 1rem;
+	z-index: 2;
+	background: var(--wp--preset--color--ink, #0F172A);
+	color: #fff;
+	font-size: var(--wp--preset--font-size--xs);
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	padding: 0.3rem 0.7rem;
+	border-radius: var(--pe-radius);
+}
+
+.pe-property-gallery__thumb-label {
+	position: absolute;
+	inset-inline: 0;
+	bottom: 0;
+	background: rgba(15, 23, 42, 0.75);
+	color: #fff;
+	font-size: 0.55rem;
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+	padding: 0.15rem 0;
+	text-align: center;
+}
+
+.pe-property-gallery__map-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	margin-top: 0.75rem;
+	font-size: var(--wp--preset--font-size--sm);
+	color: var(--wp--preset--color--gold, #B08D57);
+	text-decoration: none;
+}
+
+.pe-property-gallery__map-link:hover {
+	text-decoration: underline;
+}
+
+.pe-property-gallery__map-link-icon {
+	font-size: 1.1em;
 }
 
 .pe-property-gallery__close {
@@ -1218,6 +1454,51 @@ fieldset[class$="__field"] input[type="radio"] {
 	border: 0;
 	border-radius: var(--pe-radius);
 	padding: 0.5rem 1rem;
+}
+
+/* ---------- Location directory ---------- */
+
+/* A compact link list rather than the photo-tile pattern used for
+   Featured Locations on the homepage — a directory page can reasonably
+   list dozens of sub-areas (competitive review: Zameen's city pages list
+   every sector with a live count), and a full card per row would make that
+   list unusably long. */
+.pe-location-directory {
+	max-width: var(--wp--style--global--content-size, 1200px);
+	margin-inline: auto;
+	padding-inline: var(--wp--preset--spacing--md);
+	columns: 3;
+	column-gap: var(--wp--preset--spacing--md);
+}
+
+@media (max-width: 768px) {
+	.pe-location-directory { columns: 1; }
+}
+
+.pe-location-directory__item {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 0.75rem;
+	padding: 0.65rem 0;
+	border-bottom: 1px solid var(--wp--preset--color--border, #E2E2DE);
+	text-decoration: none;
+	break-inside: avoid;
+}
+
+.pe-location-directory__name {
+	color: var(--wp--preset--color--ink, #0F172A);
+	font-weight: 500;
+}
+
+.pe-location-directory__item:hover .pe-location-directory__name {
+	color: var(--wp--preset--color--gold, #B08D57);
+}
+
+.pe-location-directory__count {
+	color: var(--wp--preset--color--ink-soft, #475569);
+	font-size: var(--wp--preset--font-size--xs);
+	white-space: nowrap;
 }
 
 /* ---------- Breadcrumbs ---------- */
@@ -1307,6 +1588,19 @@ fieldset[class$="__field"] input[type="radio"] {
 
 .pe-dashboard-table tbody tr:hover {
 	background: var(--wp--preset--color--surface-muted, #F8F7F4);
+}
+
+.pe-dashboard-table__delete {
+	background: transparent;
+	color: #B3261E;
+	border: 1px solid #B3261E;
+	padding: 0.35rem 0.75rem;
+	font-size: var(--wp--preset--font-size--xs);
+}
+
+.pe-dashboard-table__delete:hover {
+	background: #B3261E;
+	color: var(--wp--preset--color--surface, #FFFFFF);
 }
 
 .pe-compare-table-wrapper {

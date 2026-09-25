@@ -167,6 +167,7 @@ function primeestate_validate_property_submission( array $params ) {
 		'area'              => isset( $params['area'] ) && is_numeric( $params['area'] ) ? (float) $params['area'] : 0.0,
 		'amenity_term_ids'  => $amenity_term_ids,
 		'gallery'           => primeestate_sanitize_gallery_meta( $params['images'] ?? array() ),
+		'floor_plan'        => primeestate_sanitize_floor_plan_meta( $params['floor_plan'] ?? 0 ),
 	);
 }
 
@@ -200,6 +201,10 @@ function primeestate_create_property_from_submission( array $data, int $user_id 
 	if ( ! empty( $data['gallery'] ) ) {
 		update_post_meta( $post_id, '_pe_gallery', $data['gallery'] );
 		set_post_thumbnail( $post_id, $data['gallery'][0] );
+	}
+
+	if ( ! empty( $data['floor_plan'] ) ) {
+		update_post_meta( $post_id, '_pe_floor_plan', $data['floor_plan'] );
 	}
 
 	if ( 'pending' === $status ) {

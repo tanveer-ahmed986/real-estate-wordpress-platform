@@ -66,6 +66,17 @@ function primeestate_register_map_and_search_assets(): void {
 		primeestate_asset_version( '/assets/js/property-search.js' )
 	);
 
+	primeestate_register_conditional_asset(
+		'primeestate-save-search',
+		PRIMEESTATE_THEME_URL . '/assets/js/save-search.js',
+		array( 'primeestate-rest-config' ),
+		static function () {
+			return is_post_type_archive( 'property' );
+		},
+		'script',
+		primeestate_asset_version( '/assets/js/save-search.js' )
+	);
+
 	// Map appears on the archive (result pins) and the single-property page
 	// (its own location) — everywhere else it stays unloaded.
 	$on_map_page = static function () {
@@ -125,6 +136,15 @@ function primeestate_register_map_and_search_assets(): void {
 		$on_single_property,
 		'script',
 		primeestate_asset_version( '/assets/js/viewing-form.js' )
+	);
+
+	primeestate_register_conditional_asset(
+		'primeestate-mortgage-calculator',
+		PRIMEESTATE_THEME_URL . '/assets/js/mortgage-calculator.js',
+		array(),
+		$on_single_property,
+		'script',
+		primeestate_asset_version( '/assets/js/mortgage-calculator.js' )
 	);
 }
 add_action( 'wp_enqueue_scripts', 'primeestate_register_map_and_search_assets', 5 );

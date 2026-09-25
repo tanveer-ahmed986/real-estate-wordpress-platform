@@ -137,5 +137,19 @@ function primeestate_render_filter_panel( array $current_filters ): void {
 		<button type="submit" class="pe-filter-panel__submit"><?php esc_html_e( 'Apply filters', 'primeestate' ); ?></button>
 		<a class="pe-filter-panel__clear" href="<?php echo esc_url( get_post_type_archive_link( 'property' ) ); ?>"><?php esc_html_e( 'Clear all', 'primeestate' ); ?></a>
 	</form>
+
+	<?php if ( is_user_logged_in() ) : ?>
+		<div class="pe-save-search" data-component="save-search">
+			<label class="screen-reader-text" for="pe-save-search-label"><?php esc_html_e( 'Name this search', 'primeestate' ); ?></label>
+			<input type="text" id="pe-save-search-label" class="pe-save-search__label" placeholder="<?php esc_attr_e( 'Name this search (optional)', 'primeestate' ); ?>">
+			<button type="button" class="pe-save-search__button" data-component="save-search-button"><?php esc_html_e( 'Save this search', 'primeestate' ); ?></button>
+			<p class="pe-save-search__status" role="status" aria-live="polite"></p>
+		</div>
+	<?php else : ?>
+		<p class="pe-save-search__guest">
+			<a href="<?php echo esc_url( wp_login_url( get_permalink() ) ); ?>"><?php esc_html_e( 'Log in', 'primeestate' ); ?></a>
+			<?php esc_html_e( 'to save this search and get email alerts when new matches appear.', 'primeestate' ); ?>
+		</p>
+	<?php endif; ?>
 	<?php
 }
