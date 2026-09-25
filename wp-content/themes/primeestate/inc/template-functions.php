@@ -10,6 +10,39 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Every dynamic page in this theme uses the same pattern: a block template
+ * hosts a `[shortcode]` inside a `<!-- wp:shortcode -->` block, because the
+ * content is too data-driven for static block markup (established from
+ * Phase 3 onward). WordPress core's `core/shortcode` block render callback
+ * is `wpautop( $content )` (wp-includes/blocks/shortcode.php) — by the time
+ * that callback runs, `$content` is already the shortcode's fully-expanded
+ * HTML (property cards, forms, tables, everything), and `wpautop()` then
+ * mangles it: every single newline inside becomes a stray `<br />`, and
+ * sequences it doesn't recognize as already block-level get wrapped in
+ * spurious (and often mismatched — `<a>…</p>`, `</p></div>`) `<p>` tags.
+ * This has been happening on every shortcode-hosted page since Phase 3; it
+ * was invisible without a real browser to render the (often still
+ * grid/flex-recoverable) malformed output, and is exactly the class of bug
+ * the project's standing "no runtime available" caveat warned about.
+ *
+ * The fix: override the block's render callback so it returns `$content`
+ * as-is — by this point it has already been through `do_shortcode()`, so
+ * nothing here is lost, only the unwanted `wpautop()` pass is skipped.
+ * Priority 20 ensures this runs after core's own registration (`init`,
+ * default priority 10).
+ */
+function primeestate_disable_wpautop_on_shortcode_block(): void {
+	$block_type = WP_Block_Type_Registry::get_instance()->get_registered( 'core/shortcode' );
+
+	if ( $block_type ) {
+		$block_type->render_callback = static function ( $attributes, $content ) {
+			return $content;
+		};
+	}
+}
+add_action( 'init', 'primeestate_disable_wpautop_on_shortcode_block', 20 );
+
+/**
  * Formats a property price for display, honoring `_pe_price_type`
  * (data-model.md §1: fixed | starting_from | on_request) and the site's
  * configured currency.

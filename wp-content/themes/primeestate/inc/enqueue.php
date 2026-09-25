@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 function primeestate_enqueue_base_assets(): void {
-	wp_enqueue_style( 'primeestate-style', get_stylesheet_uri(), array(), PRIMEESTATE_THEME_VERSION );
+	wp_enqueue_style( 'primeestate-style', get_stylesheet_uri(), array(), primeestate_asset_version( '/style.css' ) );
 }
 add_action( 'wp_enqueue_scripts', 'primeestate_enqueue_base_assets' );
 
@@ -27,8 +27,8 @@ $GLOBALS['primeestate_conditional_assets'] = array();
  * or only on a single property page) — avoids shipping map/comparison JS
  * to every page.
  */
-function primeestate_register_conditional_asset( string $handle, string $src, array $deps, callable $condition, string $type = 'script' ): void {
-	$GLOBALS['primeestate_conditional_assets'][] = compact( 'handle', 'src', 'deps', 'condition', 'type' );
+function primeestate_register_conditional_asset( string $handle, string $src, array $deps, callable $condition, string $type = 'script', string $version = PRIMEESTATE_THEME_VERSION ): void {
+	$GLOBALS['primeestate_conditional_assets'][] = compact( 'handle', 'src', 'deps', 'condition', 'type', 'version' );
 }
 
 function primeestate_enqueue_conditional_assets(): void {
@@ -38,9 +38,9 @@ function primeestate_enqueue_conditional_assets(): void {
 		}
 
 		if ( 'style' === $asset['type'] ) {
-			wp_enqueue_style( $asset['handle'], $asset['src'], $asset['deps'], PRIMEESTATE_THEME_VERSION );
+			wp_enqueue_style( $asset['handle'], $asset['src'], $asset['deps'], $asset['version'] );
 		} else {
-			wp_enqueue_script( $asset['handle'], $asset['src'], $asset['deps'], PRIMEESTATE_THEME_VERSION, true );
+			wp_enqueue_script( $asset['handle'], $asset['src'], $asset['deps'], $asset['version'], true );
 		}
 	}
 }
@@ -61,7 +61,9 @@ function primeestate_register_map_and_search_assets(): void {
 		array(),
 		static function () {
 			return is_post_type_archive( 'property' );
-		}
+		},
+		'script',
+		primeestate_asset_version( '/assets/js/property-search.js' )
 	);
 
 	// Map appears on the archive (result pins) and the single-property page
@@ -89,7 +91,9 @@ function primeestate_register_map_and_search_assets(): void {
 		'primeestate-map',
 		PRIMEESTATE_THEME_URL . '/assets/js/map.js',
 		array( 'leaflet' ),
-		$on_map_page
+		$on_map_page,
+		'script',
+		primeestate_asset_version( '/assets/js/map.js' )
 	);
 
 	$on_single_property = static function () {
@@ -100,21 +104,27 @@ function primeestate_register_map_and_search_assets(): void {
 		'primeestate-gallery',
 		PRIMEESTATE_THEME_URL . '/assets/js/gallery.js',
 		array(),
-		$on_single_property
+		$on_single_property,
+		'script',
+		primeestate_asset_version( '/assets/js/gallery.js' )
 	);
 
 	primeestate_register_conditional_asset(
 		'primeestate-inquiry-form',
 		PRIMEESTATE_THEME_URL . '/assets/js/inquiry-form.js',
 		array(),
-		$on_single_property
+		$on_single_property,
+		'script',
+		primeestate_asset_version( '/assets/js/inquiry-form.js' )
 	);
 
 	primeestate_register_conditional_asset(
 		'primeestate-viewing-form',
 		PRIMEESTATE_THEME_URL . '/assets/js/viewing-form.js',
 		array(),
-		$on_single_property
+		$on_single_property,
+		'script',
+		primeestate_asset_version( '/assets/js/viewing-form.js' )
 	);
 }
 add_action( 'wp_enqueue_scripts', 'primeestate_register_map_and_search_assets', 5 );
@@ -163,8 +173,8 @@ function primeestate_enqueue_favorites_and_comparison_assets(): void {
 		return;
 	}
 
-	wp_enqueue_script( 'primeestate-favorites', PRIMEESTATE_THEME_URL . '/assets/js/favorites.js', array( 'primeestate-rest-config' ), PRIMEESTATE_THEME_VERSION, true );
-	wp_enqueue_script( 'primeestate-comparison', PRIMEESTATE_THEME_URL . '/assets/js/comparison.js', array( 'primeestate-rest-config' ), PRIMEESTATE_THEME_VERSION, true );
+	wp_enqueue_script( 'primeestate-favorites', PRIMEESTATE_THEME_URL . '/assets/js/favorites.js', array( 'primeestate-rest-config' ), primeestate_asset_version( '/assets/js/favorites.js' ), true );
+	wp_enqueue_script( 'primeestate-comparison', PRIMEESTATE_THEME_URL . '/assets/js/comparison.js', array( 'primeestate-rest-config' ), primeestate_asset_version( '/assets/js/comparison.js' ), true );
 }
 add_action( 'wp_enqueue_scripts', 'primeestate_enqueue_favorites_and_comparison_assets' );
 
@@ -175,15 +185,15 @@ add_action( 'wp_enqueue_scripts', 'primeestate_enqueue_favorites_and_comparison_
  */
 function primeestate_enqueue_agent_area_assets(): void {
 	if ( is_page( 'agent-dashboard' ) ) {
-		wp_enqueue_script( 'primeestate-agent-dashboard', PRIMEESTATE_THEME_URL . '/assets/js/agent-dashboard.js', array( 'primeestate-rest-config' ), PRIMEESTATE_THEME_VERSION, true );
+		wp_enqueue_script( 'primeestate-agent-dashboard', PRIMEESTATE_THEME_URL . '/assets/js/agent-dashboard.js', array( 'primeestate-rest-config' ), primeestate_asset_version( '/assets/js/agent-dashboard.js' ), true );
 	}
 
 	if ( is_page( 'agent-add-property' ) || is_page( 'submit-property' ) ) {
-		wp_enqueue_script( 'primeestate-property-form', PRIMEESTATE_THEME_URL . '/assets/js/property-form.js', array( 'primeestate-rest-config' ), PRIMEESTATE_THEME_VERSION, true );
+		wp_enqueue_script( 'primeestate-property-form', PRIMEESTATE_THEME_URL . '/assets/js/property-form.js', array( 'primeestate-rest-config' ), primeestate_asset_version( '/assets/js/property-form.js' ), true );
 	}
 
 	if ( is_page( 'agent-profile-edit' ) ) {
-		wp_enqueue_script( 'primeestate-agent-profile-form', PRIMEESTATE_THEME_URL . '/assets/js/agent-profile-form.js', array( 'primeestate-rest-config' ), PRIMEESTATE_THEME_VERSION, true );
+		wp_enqueue_script( 'primeestate-agent-profile-form', PRIMEESTATE_THEME_URL . '/assets/js/agent-profile-form.js', array( 'primeestate-rest-config' ), primeestate_asset_version( '/assets/js/agent-profile-form.js' ), true );
 	}
 }
 add_action( 'wp_enqueue_scripts', 'primeestate_enqueue_agent_area_assets' );
@@ -200,6 +210,6 @@ function primeestate_enqueue_user_dashboard_assets(): void {
 		return;
 	}
 
-	wp_enqueue_script( 'primeestate-user-dashboard', PRIMEESTATE_THEME_URL . '/assets/js/user-dashboard.js', array( 'primeestate-rest-config' ), PRIMEESTATE_THEME_VERSION, true );
+	wp_enqueue_script( 'primeestate-user-dashboard', PRIMEESTATE_THEME_URL . '/assets/js/user-dashboard.js', array( 'primeestate-rest-config' ), primeestate_asset_version( '/assets/js/user-dashboard.js' ), true );
 }
 add_action( 'wp_enqueue_scripts', 'primeestate_enqueue_user_dashboard_assets' );

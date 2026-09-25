@@ -2,9 +2,16 @@
 /wp-admin/
 /wp-includes/
 /wp-*.php
+/index.php
+/.htaccess
+/readme.html
+/license.txt
 !wp-content/
 /xmlrpc.php
 /wp-config.php
+
+# Local dev stack (docker-compose WordPress+MySQL, not part of the project)
+/docker-compose.yml
 
 # Dependencies
 /vendor/

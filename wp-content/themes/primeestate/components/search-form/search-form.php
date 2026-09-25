@@ -67,6 +67,21 @@ function primeestate_render_search_form( array $current_filters = array() ): voi
 }
 
 /**
+ * `[primeestate_search_form]` — this component previously had no caller
+ * anywhere in the theme (every other dynamic component follows the
+ * shortcode-hosting pattern; this one had been built but never wired up,
+ * since no homepage template existed to host it until `templates/index.html`
+ * was added). Reads the same `$_GET` filters as the archive so a homepage
+ * search and a direct archive visit behave identically.
+ */
+function primeestate_search_form_shortcode(): string {
+	ob_start();
+	primeestate_render_search_form( primeestate_normalize_filters( wp_unslash( $_GET ) ) );
+	return (string) ob_get_clean();
+}
+add_shortcode( 'primeestate_search_form', 'primeestate_search_form_shortcode' );
+
+/**
  * Leaf (city) `location` terms for the search form's location typeahead —
  * shared with the seed command's own hierarchy so demo data is searchable.
  *
